@@ -59,11 +59,11 @@ dependencies {
 
 ```java
 @Override
-public void onInitialize(){
-        // Note that its best to put this before any other intialization that requires the UI
-        GavUI.initialize();
-        // your mod's initialization code...
-        }
+public void onInitialize() {
+    // Note that its best to put this before any other intialization that requires the UI
+    GavUI.initialize();
+    // your mod's initialization code...
+}  
 ```
 
 8. Enjoy!
