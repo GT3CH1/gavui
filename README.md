@@ -16,36 +16,14 @@ A Minecraft UI library that aims to bring ease of use to the modding community.
 ---
 
 ## How to use
-
-1. Generate a GitHub token
-2. Add the library repository to your build.gradle file:
-
-```groovy
-repositories {
-    maven {
-        url = uri("https://maven.pkg.github.com/gt3ch1/gavui")
-        credentials {
-            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-            password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
-        }
-    }
-}
-```
-
-3. Edit ~/.gradle/gradle.properties and add the following:
-
-```
-gpr.user = <your-username>
-gpr.key = <your-token>
-```
-
-4. In your project's gradle.properties file, add the following:
+1. Ensure `mavenCentral` is added as a repository.
+2. In your project's gradle.properties file, add the following:
 
 ```gradle
 gavui_version = <your-version>
 ```
 
-5. In your project's build.gradle file, add the following:
+3. In your project's build.gradle file, add the following:
 
 ```groovy
 dependencies {
@@ -54,8 +32,8 @@ dependencies {
 }
 ```
 
-6. Sync your gradle project
-7. Add the following line to your mod's initializer:
+4. Sync your gradle project
+5. Add the following line to your mod's initializer:
 
 ```java
 @Override
@@ -66,7 +44,7 @@ public void onInitialize() {
 }  
 ```
 
-8. Enjoy!
+6. Enjoy!
 
 ---
 
