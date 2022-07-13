@@ -91,9 +91,10 @@ public class Gui {
     /**
      * Creates a new GUI menu.
      *
-     * @param width  - The width of the gui.
-     * @param height - The height of the gui.
-     * @param title  - The title of the gui.
+     * @param topLeft - The top left corner of the gui.
+     * @param width   - The width of the gui.
+     * @param height  - The height of the gui.
+     * @param title   - The title of the gui.
      */
     public Gui(PointD topLeft, int width, int height, Text title) {
         box = new BoxD(topLeft, width, height);
@@ -281,7 +282,11 @@ public class Gui {
      *
      * @param matrixStack The matrix stack used to draw boxes on screen.
      * @param tr          The text render to use to draw text
+     * @param mouseX      The x coordinate of the mouse.
+     * @param mouseY      The y coordinate of the mouse.
+     * @param delta       The change in time since the last render.
      */
+
     public void render(MatrixStack matrixStack, TextRenderer tr, int mouseX, int mouseY, float delta) {
         if (isHidden()) return;
         GuiUtil.drawBox(backgroundColor.getAsFloatArray(), (int) getX(), (int) getY(), (int) getX2(), (int) getY2() + 1, matrixStack);

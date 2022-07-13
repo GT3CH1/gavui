@@ -41,6 +41,8 @@ public class BoxD {
      * Creates a new box.
      *
      * @param topLeft - The top left corner of the box.
+     * @param width   - The width of the box.
+     * @param height - The height of the box.
      */
     public BoxD(PointD topLeft, double width, double height) {
         this.width = width;
@@ -49,6 +51,11 @@ public class BoxD {
         this.bottomRight = topLeft.add(new PointD(width, height));
     }
 
+    /**
+     * Creates a copy of the given box.
+     * @param other - The box to copy.
+     * @return A copy of the given box.
+     */
     public static BoxD copy(BoxD other) {
         return new BoxD(other.topLeft, other.width, other.height);
     }

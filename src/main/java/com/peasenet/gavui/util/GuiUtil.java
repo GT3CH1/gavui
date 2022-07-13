@@ -6,7 +6,18 @@ import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Matrix4f;
 
+
+/**
+ * @author gt3ch1
+ * @version 7/13/2022
+ * A utility class for drawing gui elements.
+ */
 public class GuiUtil {
+    /**
+     * @param acColor     - The color to draw the box with.
+     * @param box         - The box to draw.
+     * @param matrixStack - The matrix stack to draw with.
+     */
     public static void drawBox(float[] acColor, BoxD box, MatrixStack matrixStack) {
         int xt1 = (int) box.getTopLeft().x();
         int yt1 = (int) box.getTopLeft().y();
@@ -22,6 +33,16 @@ public class GuiUtil {
         Tessellator.getInstance().draw();
     }
 
+    /**
+     * Draws a box with the given coordinates.
+     *
+     * @param xt1           - The x coordinate of the top left corner.
+     * @param yt1           - The y coordinate of the top left corner.
+     * @param xt2           - The x coordinate of the bottom right corner.
+     * @param yt2           - The y coordinate of the bottom right corner.
+     * @param matrix        - The matrix to draw with.
+     * @param bufferBuilder - The buffer to draw with.
+     */
     public static void drawBox(int xt1, int yt1, int xt2, int yt2, Matrix4f matrix, BufferBuilder bufferBuilder) {
         bufferBuilder.vertex(matrix, xt1, yt1, 0).next();
         bufferBuilder.vertex(matrix, xt1, yt2, 0).next();
@@ -50,10 +71,27 @@ public class GuiUtil {
         Tessellator.getInstance().draw();
     }
 
+    /**
+     * Draws an outline of the given box with the given color.
+     *
+     * @param acColor     - The color to draw the outline with.
+     * @param box         - The outline of a box to draw.
+     * @param matrixStack - The matrix stack to draw with.
+     */
     public static void drawOutline(float[] acColor, BoxD box, MatrixStack matrixStack) {
         drawOutline(acColor, (int) box.getTopLeft().x(), (int) box.getTopLeft().y(), (int) box.getBottomRight().x(), (int) box.getBottomRight().y(), matrixStack);
     }
 
+    /**
+     * Draws an outline of the given coordinates with the given color.
+     *
+     * @param acColor     - The color to draw the outline with.
+     * @param xt1         - The x coordinate of the top left corner of the box.
+     * @param yt1         - The y coordinate of the top left corner of the box.
+     * @param xt2         - The x coordinate of the bottom right corner of the box.
+     * @param yt2         - The y coordinate of the bottom right corner of the box.
+     * @param matrixStack - The matrix stack to draw with.
+     */
     public static void drawOutline(float[] acColor, int xt1, int yt1, int xt2, int yt2, MatrixStack matrixStack) {
         RenderSystem.setShader(GameRenderer::getPositionShader);
         RenderSystem.enableBlend();

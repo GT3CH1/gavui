@@ -62,6 +62,8 @@ public class GuiDropdown extends GuiDraggable {
 
     /**
      * Gets whether the dropdown is open.
+     *
+     * @return Whether the dropdown is open.
      */
     public boolean isOpen() {
         return isOpen;
@@ -95,8 +97,7 @@ public class GuiDropdown extends GuiDraggable {
                 if (g.mouseClicked(mouseX, mouseY, button) && !g.isHidden()) {
                     for (Gui child : children) {
                         if (child instanceof GuiDropdown dropdown && !child.equals(g))
-                            if (dropdown.isOpen())
-                                dropdown.toggleMenu();
+                            if (dropdown.isOpen()) dropdown.toggleMenu();
                     }
                     g.show();
                     return true;
@@ -222,6 +223,7 @@ public class GuiDropdown extends GuiDraggable {
      * A direction that represents which way the dropdown will be displayed.
      */
     public enum Direction {
-        DOWN, RIGHT
+        DOWN,
+        RIGHT
     }
 }
