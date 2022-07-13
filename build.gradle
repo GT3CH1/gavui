@@ -1,10 +1,12 @@
 plugins {
     id 'fabric-loom' version '0.12-SNAPSHOT'
     id 'maven-publish'
+    id 'signing'
 }
 
 repositories {
     mavenLocal()
+    mavenCentral()
 }
 
 
@@ -58,15 +60,39 @@ jar {
         rename { "${it}_${project.archivesBaseName}" }
     }
 }
-
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
 // configure the maven publication
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
-        }
-        gpr(MavenPublication) {
-            from components.java
+            artifact javadocJar
+            pom {
+                name = "${project.maven_group}:${project.archives_base_name}"
+                description = "A UI library for Minecraft aimed for developers."
+                url = "https://github.com/GT3CH1/gavui"
+                license {
+                    name = "MIT"
+                    url = "https://opensource.org/licenses/MIT"
+                }
+                developers {
+                    developer {
+                        name = "Gavin Pease"
+                        email = "gcpease@peasenet.com"
+                        organization = "GT3CH1"
+                        organizationUrl = "https://github.com/GT3CH1"
+                    }
+                }
+                scm {
+                    connection = "scm:git:git://github.com/GT3CH1/gavui.git"
+                    developerConnection = "scm:git:ssh://github.com:GT3CH1/gavui.git"
+                    url = "https://github.com/GT3CH1/gavui/tree/master"
+                }
+            }
+
         }
     }
     repositories {
@@ -78,5 +104,18 @@ publishing {
                 password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
             }
         }
+        maven {
+            name = "SonaType"
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials {
+                username = project.findProperty("ossrhUsername")
+                password = project.findProperty("ossrhPassword")
+            }
+        }
+
     }
+}
+signing {
+    useGpgCmd()
+    sign publishing.publications.mavenJava
 }
