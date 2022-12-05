@@ -264,7 +264,7 @@ public class Gui {
      * Shrinks this gui by 5.5 pixels to fit a scrollbar.
      */
     public void shrinkForScrollbar() {
-        if (!shrunkForScroll) setWidth(getWidth() - 5.5);
+        if (!shrunkForScroll) setWidth(getWidth() - 10);
         shrunkForScroll = true;
     }
 
