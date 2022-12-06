@@ -24,8 +24,8 @@ import com.peasenet.gavui.color.Color;
 import com.peasenet.gavui.color.Colors;
 import com.peasenet.gavui.math.BoxD;
 import com.peasenet.gavui.math.PointD;
-import com.peasenet.gavui.util.GuiUtil;
 import com.peasenet.gavui.util.GavUISettings;
+import com.peasenet.gavui.util.GuiUtil;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -46,7 +46,7 @@ public class Gui {
     /**
      * The list of buttons(mods) in this dropdown.
      */
-    protected final ArrayList<Gui> children = new ArrayList<>();
+    protected ArrayList<Gui> children = new ArrayList<>();
     /**
      * The title of the gui.
      */
@@ -143,7 +143,7 @@ public class Gui {
      * Clears all children from this gui.
      */
     public void clearChildren() {
-        children.clear();
+        children = new ArrayList<>();
     }
 
     /**
@@ -188,6 +188,7 @@ public class Gui {
      */
     public void hide() {
         hidden = true;
+        children.forEach(Gui::hide);
     }
 
     /**
@@ -195,6 +196,7 @@ public class Gui {
      */
     public void show() {
         hidden = false;
+        children.forEach(Gui::show);
     }
 
     /**
@@ -264,8 +266,14 @@ public class Gui {
      * Shrinks this gui by 5.5 pixels to fit a scrollbar.
      */
     public void shrinkForScrollbar() {
-        if (!shrunkForScroll) setWidth(getWidth() - 10);
+        if (shrunkForScroll) return;
+        setWidth(getWidth() - 1);
         shrunkForScroll = true;
+    }
+
+    public void shrinkForScrollbar(Gui parent) {
+        if (this.getWidth() == parent.getWidth())
+            this.setWidth(parent.getWidth() - 5);
     }
 
     /**
@@ -294,6 +302,9 @@ public class Gui {
         if (symbol != '\0')
             tr.draw(matrixStack, String.valueOf(symbol), (int) getX2() + symbolOffsetX, (int) getY() + symbolOffsetY, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
         GuiUtil.drawOutline(Colors.WHITE.getAsFloatArray(), (int) getX(), (int) getY(), (int) getX2(), (int) getY2() + 1, matrixStack);
+        if(hasChildren())
+            for(Gui c : children)
+                c.render(matrixStack,tr,mouseX,mouseY,delta);
     }
 
     /**
@@ -350,6 +361,8 @@ public class Gui {
      */
     public void setDragging(boolean dragging) {
         this.dragging = dragging;
+        for (Gui child : children)
+            child.setDragging(dragging);
     }
 
     /**

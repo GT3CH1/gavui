@@ -82,7 +82,7 @@ public class GuiDropdown extends GuiDraggable {
             var child = toRenderList.get(i);
             switch (getDirection()) {
                 case DOWN -> child.setPosition(new PointD(getX(), getY2() + 2 + (i * 12)));
-                case RIGHT -> child.setPosition(new PointD(getX2() + 6, getY() + (i * 12)));
+                case RIGHT -> child.setPosition(new PointD(getX2() + 10, getY() + (i * 12)));
             }
             child.render(matrixStack, tr, mouseX, mouseY, delta);
         }
@@ -164,10 +164,12 @@ public class GuiDropdown extends GuiDraggable {
      */
     private void resetDropdownsLocation() {
         // copy buttons to a new array
-        ArrayList<Gui> newButtons = new ArrayList<>(children);
-        children.clear();
-        // check if newbuttons contains any children
-        newButtons.forEach(this::addElement);
+        for(Gui element : children) {
+            if (getDirection() == Direction.RIGHT) {
+                element.setPosition(new PointD(getX2() + 12, getY2() + (children.size()) * 12));
+            }
+        }
+
     }
 
     /**
@@ -194,6 +196,7 @@ public class GuiDropdown extends GuiDraggable {
         if (getDirection() == Direction.RIGHT) {
             element.setPosition(new PointD(getX2() + 12, getY2() + (children.size()) * 12));
         }
+        element.setWidth(getWidth());
     }
 
     /**
