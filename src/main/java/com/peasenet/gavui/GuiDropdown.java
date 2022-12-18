@@ -209,11 +209,11 @@ public class GuiDropdown extends GuiDraggable {
         if (!isOpen()) {
             switch (getDirection()) {
                 case RIGHT -> {
-                    symbol = '\u25B6';
+                    symbol = '▶';
                     symbolOffsetX = -8;
                 }
                 case DOWN -> {
-                    symbol = '\u25BC';
+                    symbol = '▼';
                     symbolOffsetY = 3;
                     symbolOffsetX = -8;
                 }

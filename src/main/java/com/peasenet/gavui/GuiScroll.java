@@ -106,9 +106,14 @@ public class GuiScroll extends GuiDropdown {
         else setBackground(GavUISettings.getColor("gui.color.background"));
         var offset = shouldDrawScrollBar() ? 5 : 0;
         GuiUtil.drawBox(getBackgroundColor().getAsFloatArray(), (int) getX(), (int) getY(), (int) getX2(), (int) getY2() + 1, matrixStack);
-        tr.draw(matrixStack, title, (int) getX() + 2, (int) getY() + 2, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
+        var t = title;
+        if(frozen())
+            t = t.copy().append(" (!)");
+        tr.draw(matrixStack, t, (int) getX() + 2, (int) getY() + 2, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
         updateSymbol();
-        tr.draw(matrixStack, String.valueOf(symbol), (int) getX2() + symbolOffsetX, (int) getY() + symbolOffsetY, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
+        var s = String.valueOf(symbol);
+
+        tr.draw(matrixStack, s, (int) getX2() + symbolOffsetX, (int) getY() + symbolOffsetY, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
         GuiUtil.drawOutline(Colors.WHITE.getAsFloatArray(), (int) getX(), (int) getY(), (int) getX2(), (int) getY2() + 1, matrixStack);
 
         if (!isOpen()) return;
@@ -126,7 +131,7 @@ public class GuiScroll extends GuiDropdown {
             if (shouldDrawScrollBar()) {
                 drawScrollBox(matrixStack);
                 drawScrollBar(matrixStack);
-                child.setWidth(this.getWidth() - 5);
+                child.shrinkForScrollbar(this);
             }
             if (!child.isParent() && !(child instanceof GuiCycle))
                 child.setBackground(GavUISettings.getColor("gui.color.background"));
@@ -273,6 +278,10 @@ public class GuiScroll extends GuiDropdown {
         if (isHidden()) return false;
         if (mouseWithinGui(x, y)) {
             if (clickedOnChild(x, y, button)) return true;
+            if (button == 1 && isParent()) {
+                setFrozen(!frozen());
+                return true;
+            }
             toggleMenu();
             return true;
         }

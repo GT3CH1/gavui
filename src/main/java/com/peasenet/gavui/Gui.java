@@ -272,8 +272,10 @@ public class Gui {
     }
 
     public void shrinkForScrollbar(Gui parent) {
+        if (shrunkForScroll) return;
         if (this.getWidth() == parent.getWidth())
-            this.setWidth(parent.getWidth() - 5);
+            this.setWidth(getWidth() - 5);
+        shrunkForScroll = true;
     }
 
     /**
