@@ -164,7 +164,7 @@ public class GuiDropdown extends GuiDraggable {
      */
     private void resetDropdownsLocation() {
         // copy buttons to a new array
-        for(Gui element : children) {
+        for (Gui element : children) {
             if (getDirection() == Direction.RIGHT) {
                 element.setPosition(new PointD(getX2() + 12, getY2() + (children.size()) * 12));
             }
@@ -209,11 +209,11 @@ public class GuiDropdown extends GuiDraggable {
         if (!isOpen()) {
             switch (getDirection()) {
                 case RIGHT -> {
-                    symbol = '▶';
+                    symbol = '\u25B6';
                     symbolOffsetX = -8;
                 }
                 case DOWN -> {
-                    symbol = '▼';
+                    symbol = '\u25BC';
                     symbolOffsetY = 3;
                     symbolOffsetX = -8;
                 }
