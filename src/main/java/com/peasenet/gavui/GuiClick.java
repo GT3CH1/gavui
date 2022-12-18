@@ -74,7 +74,7 @@ public class GuiClick extends Gui {
         var inGui = mouseWithinGui(mouseX, mouseY) && !isHidden();
         if (inGui && GavUISettings.getBool("gui.sound"))
             MinecraftClient.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.5f, 1);
-        if (inGui && callback != null) callback.callback();
+        if (inGui && callback != null && !isHidden()) callback.callback();
 
         return inGui;
     }

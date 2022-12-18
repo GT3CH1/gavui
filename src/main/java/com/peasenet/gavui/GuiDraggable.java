@@ -72,4 +72,13 @@ public class GuiDraggable extends GuiClick {
         setMidPoint(new PointD(mouseX, mouseY));
         return true;
     }
+    
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if(button == 1) {
+            setFrozen(!frozen());
+            return true;
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
 }
