@@ -267,12 +267,12 @@ public class Gui {
      */
     public void shrinkForScrollbar() {
         if (shrunkForScroll) return;
-        setWidth(getWidth() - 1);
+        setWidth(getWidth() - 5);
         shrunkForScroll = true;
     }
 
     public void shrinkForScrollbar(Gui parent) {
-        if (shrunkForScroll) return;
+        if (shrunkForScroll && this.getWidth() == parent.getWidth()) return;
         if (this.getWidth() == parent.getWidth())
             this.setWidth(getWidth() - 5);
         shrunkForScroll = true;
@@ -304,9 +304,9 @@ public class Gui {
         if (symbol != '\0')
             tr.draw(matrixStack, String.valueOf(symbol), (int) getX2() + symbolOffsetX, (int) getY() + symbolOffsetY, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
         GuiUtil.drawOutline(Colors.WHITE.getAsFloatArray(), (int) getX(), (int) getY(), (int) getX2(), (int) getY2() + 1, matrixStack);
-        if(hasChildren())
-            for(Gui c : children)
-                c.render(matrixStack,tr,mouseX,mouseY,delta);
+        if (hasChildren())
+            for (Gui c : children)
+                c.render(matrixStack, tr, mouseX, mouseY, delta);
     }
 
     /**
@@ -428,5 +428,12 @@ public class Gui {
      */
     public boolean hasChildren() {
         return !children.isEmpty();
+    }
+
+    public void setShrunkForScrollbar(boolean b) {
+        shrunkForScroll = b;
+        if(hasChildren())
+            for(Gui c : children)
+                c.setShrunkForScrollbar(b);
     }
 }
