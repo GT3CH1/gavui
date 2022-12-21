@@ -69,7 +69,7 @@ public class GuiCycle extends GuiClick {
                 currentIndex = 0;
             }
             if (GavUISettings.getBool("gui.sound")) {
-                MinecraftClient.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK, 1.0F, 1.0F);
+                MinecraftClient.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 1.0F, 1.0F);
             }
             callback.callback();
             return true;

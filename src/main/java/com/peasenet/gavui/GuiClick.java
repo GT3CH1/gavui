@@ -73,7 +73,7 @@ public class GuiClick extends Gui {
         // check if mouseX and mouseY are within the bounds of the gui.
         var inGui = mouseWithinGui(mouseX, mouseY) && !isHidden();
         if (inGui && GavUISettings.getBool("gui.sound"))
-            MinecraftClient.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.5f, 1);
+            MinecraftClient.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 0.5f, 1);
         if (inGui && callback != null && !isHidden()) callback.callback();
 
         return inGui;

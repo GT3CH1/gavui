@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.peasenet.gavui.math.BoxD;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Matrix4f;
+import org.joml.Matrix4f;
 
 
 /**
@@ -23,7 +23,7 @@ public class GuiUtil {
         int yt1 = (int) box.getTopLeft().y();
         int xt2 = (int) box.getBottomRight().x();
         int yt2 = (int) box.getBottomRight().y();
-        RenderSystem.setShader(GameRenderer::getPositionShader);
+        RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.enableBlend();
         var matrix = matrixStack.peek().getPositionMatrix();
         var bufferBuilder = Tessellator.getInstance().getBuffer();
@@ -61,7 +61,7 @@ public class GuiUtil {
      * @param matrixStack The matrix stack used to draw boxes on screen.
      */
     public static void drawBox(float[] acColor, int xt1, int yt1, int xt2, int yt2, MatrixStack matrixStack) {
-        RenderSystem.setShader(GameRenderer::getPositionShader);
+        RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.enableBlend();
         var matrix = matrixStack.peek().getPositionMatrix();
         var bufferBuilder = Tessellator.getInstance().getBuffer();
@@ -93,7 +93,7 @@ public class GuiUtil {
      * @param matrixStack - The matrix stack to draw with.
      */
     public static void drawOutline(float[] acColor, int xt1, int yt1, int xt2, int yt2, MatrixStack matrixStack) {
-        RenderSystem.setShader(GameRenderer::getPositionShader);
+        RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.enableBlend();
         var matrix = matrixStack.peek().getPositionMatrix();
         var bufferBuilder = Tessellator.getInstance().getBuffer();
