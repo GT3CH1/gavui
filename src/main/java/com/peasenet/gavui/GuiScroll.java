@@ -107,7 +107,7 @@ public class GuiScroll extends GuiDropdown {
         var offset = shouldDrawScrollBar() ? 5 : 0;
         GuiUtil.drawBox(getBackgroundColor().getAsFloatArray(), (int) getX(), (int) getY(), (int) getX2(), (int) getY2() + 1, matrixStack);
         var t = title;
-        if(frozen())
+        if (frozen())
             t = t.copy().append(" (!)");
         tr.draw(matrixStack, t, (int) getX() + 2, (int) getY() + 2, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
         updateSymbol();
@@ -282,8 +282,47 @@ public class GuiScroll extends GuiDropdown {
                 setFrozen(!frozen());
                 return true;
             }
+
+            // check if the mouse is within the scrollbox
+
             toggleMenu();
             return true;
+        } else if (shouldDrawScrollBar()) {
+            var scrollBoxX = getX() + getWidth() - 5;
+            var scrollBoxY = (getY2()) + 2;
+            var scrollBoxHeight = getScrollBoxHeight();
+            if (getDirection() == Direction.RIGHT) {
+                scrollBoxX = children.get(page * maxChildren).getX2() + 0;
+                scrollBoxY = getY();
+            }
+            if (x >= scrollBoxX && x <= scrollBoxX + 5 && y >= scrollBoxY && y <= scrollBoxY + scrollBoxHeight) {
+                var scrollBoxY2 = scrollBoxY + scrollBoxHeight;
+                var scrollBarY = (scrollBoxHeight * (page / (double) numPages)) + getY2() + 3;
+                var scrollBarX = children.get(page * maxChildren).getX2() + 1;
+                var scrollBarY2 = ((scrollBarY) + (scrollBoxHeight / (numPages)));
+                if (getDirection() == Direction.RIGHT) {
+                    // set scrollbarY to (1/page) * scrollBoxHeight
+                    scrollBarY = (scrollBoxHeight * (page / (double) numPages)) + getY() + 1;
+                    scrollBarX = children.get(page * maxChildren).getX2() + 1;
+                    scrollBarY2 = ((scrollBarY) + (scrollBoxHeight / (numPages)));
+                }
+                if (x >= scrollBarX && x <= scrollBarX + 3 && y >= scrollBarY && y <= scrollBarY2) {
+                    // clicked on the scrollbar
+                    return true;
+                }
+                if (y < scrollBarY - 5) {
+                    // clicked above the scrollbar
+                    scrollUp();
+                    resetChildPos();
+                    return true;
+                }
+                if (y > scrollBarY2 - 5) {
+                    // clicked below the scrollbar
+                    scrollDown();
+                    resetChildPos();
+                    return true;
+                }
+            }
         }
         return false;
     }
