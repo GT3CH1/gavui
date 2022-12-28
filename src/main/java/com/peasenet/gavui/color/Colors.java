@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2022. Gavin Pease and contributors.
+ * Copyright (c) 2022-2022. Gavin Pease and contributors.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction, including
  * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
- *  of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
- *  following conditions:
+ * of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial
  * portions of the Software.
@@ -49,13 +49,14 @@ public class Colors {
     public static final Color DARK_SPRING_GREEN = Color.fromInt(0x1D734B);
     public static final Color MEDIUM_SEA_GREEN = Color.fromInt(0x32a670);
     public static final Color DESERT_SAND = Color.fromInt(0xD9D2B0);
+    public static final Color RED_ORANGE = Color.fromInt(0xFF4500);
 
     /**
      * The list of all colors.
      */
     public static final Color[] COLORS = {
             RED, DARK_RED, GREEN, DARK_GREEN, BLUE, YELLOW, PURPLE, CYAN, WHITE, BLACK, GRAY, DARK_GRAY, DARK_CYAN, GOLD,
-            INDIGO, SHADOW_BLUE, DARK_SPRING_GREEN, MEDIUM_SEA_GREEN, DESERT_SAND
+            INDIGO, SHADOW_BLUE, DARK_SPRING_GREEN, MEDIUM_SEA_GREEN, DESERT_SAND, RED_ORANGE
     };
 
     /**
@@ -79,7 +80,6 @@ public class Colors {
      * @return A random color index.
      */
     public static int getRandomColor() {
-        var num = new Random(System.currentTimeMillis()).nextInt(COLORS.length);
-        return num;
+        return new Random(System.currentTimeMillis()).nextInt(COLORS.length);
     }
 }
