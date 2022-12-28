@@ -31,7 +31,7 @@ import java.util.Random;
 public class Colors {
 
     public static final Color RED = new Color(255, 0, 0);
-    public static final Color DARK_RED = new Color(90, 50, 50);
+    public static final Color DARK_RED = Color.fromInt(0x610b0b);
     public static final Color GREEN = new Color(0, 255, 0);
     public static final Color DARK_GREEN = new Color(0, 127, 0);
     public static final Color BLUE = new Color(0, 0, 255);
