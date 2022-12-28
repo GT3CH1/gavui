@@ -297,7 +297,17 @@ public class GuiScroll extends GuiDropdown {
 
             toggleMenu();
             return true;
-        } else if (shouldDrawScrollBar()) {
+        } else if (clickedOnScrollBar(x, y)) return true;
+        return false;
+    }
+
+    boolean clickedOnScrollBar(double x, double y) {
+        for (Gui c : children) {
+            if (c instanceof GuiScroll) {
+                if (((GuiScroll) c).clickedOnScrollBar(x, y)) return true;
+            }
+        }
+        if (shouldDrawScrollBar()) {
             var scrollBoxX = getX() + getWidth() - 5;
             var scrollBoxY = (getY2()) + 2;
             var scrollBoxHeight = getScrollBoxHeight();
@@ -352,12 +362,18 @@ public class GuiScroll extends GuiDropdown {
             var gui = children.get(i);
             if (gui.isHidden()) return false;
             if (gui.mouseClicked(x, y, button)) {
-                for (Gui child : children)
-                    if (child instanceof GuiDropdown dropdown && !child.equals(gui) && dropdown.isOpen())
+                for (Gui child : children) {
+                    if (child instanceof GuiDropdown dropdown && !child.equals(gui) && dropdown.isOpen()) {
                         dropdown.toggleMenu();
+                    }
+                    if (child instanceof GuiScroll scroll) {
+                        scroll.clickedOnScrollBar(x, y);
+                    }
+                }
                 gui.show();
                 return true;
             }
+
         }
         return false;
     }
