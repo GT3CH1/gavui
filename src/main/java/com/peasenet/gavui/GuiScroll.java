@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2022. Gavin Pease and contributors.
+ * Copyright (c) 2022-2022. Gavin Pease and contributors.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction, including
  * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
- *  of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
- *  following conditions:
+ * of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial
  * portions of the Software.
@@ -277,7 +277,8 @@ public class GuiScroll extends GuiDropdown {
     public boolean mouseClicked(double x, double y, int button) {
         if (isHidden()) return false;
         if (mouseWithinGui(x, y)) {
-            if (clickedOnChild(x, y, button)) return true;
+            if (clickedOnChild(x, y, button))
+                return true;
             if (button == 1 && isParent()) {
                 setFrozen(!frozen());
                 return true;
@@ -354,6 +355,12 @@ public class GuiScroll extends GuiDropdown {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        var childOverride = false;
+        for (Gui child : children) {
+            if ((child.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) && child instanceof GuiSlider || (child.isDragging() && !child.isHidden()))) {
+                return false;
+            }
+        }
         if (super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)) {
             resetChildPos();
             return true;

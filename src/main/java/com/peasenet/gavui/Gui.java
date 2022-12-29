@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2022. Gavin Pease and contributors.
+ * Copyright (c) 2022-2022. Gavin Pease and contributors.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction, including
  * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
- *  of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
- *  following conditions:
+ * of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial
  * portions of the Software.
@@ -31,6 +31,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * @author gt3ch1
@@ -262,15 +263,6 @@ public class Gui {
         box = new BoxD(box.getTopLeft(), width, box.getHeight());
     }
 
-    /**
-     * Shrinks this gui by 5.5 pixels to fit a scrollbar.
-     */
-    public void shrinkForScrollbar() {
-        if (shrunkForScroll) return;
-        setWidth(getWidth() - 5);
-        shrunkForScroll = true;
-    }
-
     public void shrinkForScrollbar(Gui parent) {
         if (shrunkForScroll && this.getWidth() == parent.getWidth()) return;
         if (this.getWidth() == parent.getWidth())
@@ -432,8 +424,22 @@ public class Gui {
 
     public void setShrunkForScrollbar(boolean b) {
         shrunkForScroll = b;
-        if(hasChildren())
-            for(Gui c : children)
+        if (hasChildren())
+            for (Gui c : children)
                 c.setShrunkForScrollbar(b);
+    }
+
+    private final UUID uuid = UUID.randomUUID();
+
+    public UUID getUUID() {
+        return uuid;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Gui g) {
+            return g.getUUID().equals(uuid);
+        }
+        return false;
     }
 }

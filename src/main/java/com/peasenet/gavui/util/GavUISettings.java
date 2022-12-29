@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2022. Gavin Pease and contributors.
+ * Copyright (c) 2022-2022. Gavin Pease and contributors.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction, including
  * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
- *  of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
- *  following conditions:
+ * of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial
  * portions of the Software.
@@ -39,6 +39,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author gt3ch1
@@ -67,6 +68,7 @@ public class GavUISettings {
         default_settings.put("gui.color.category", (Colors.DARK_SPRING_GREEN));
         default_settings.put("gui.color.enabled", (Colors.MEDIUM_SEA_GREEN));
         default_settings.put("gui.sound", false);
+        default_settings.put("gui.alpha", 0.5f);
         load();
     }
 
@@ -141,7 +143,19 @@ public class GavUISettings {
         Gson gson = new GsonBuilder().setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE).create();
         try {
             var map = gson.fromJson(new FileReader(cfgFile), HashMap.class);
-            default_settings.forEach((k, _v) -> settings.put(k, map.get(k)));
+
+            AtomicBoolean wasNull = new AtomicBoolean(false);
+            default_settings.forEach((k, _v) -> {
+                var val = map.get(k);
+                if (val == null) {
+                    wasNull.set(true);
+                    val = default_settings.get(k);
+                }
+                settings.put(k, val);
+            });
+            if (wasNull.get()) {
+                save();
+            }
         } catch (Exception e) {
             // rename settings file to settings.bak
             var bakFile = cfgFile + ".bak";
@@ -224,5 +238,14 @@ public class GavUISettings {
     public static void add(String key, Serializable value) {
         settings.put(key, value);
         save();
+    }
+
+    public static float getFloat(String s) {
+        if (!settings.containsKey(s)) return 0;
+        if (settings.get(s) == null) {
+            settings.put(s, 0);
+            return 0;
+        }
+        return Float.parseFloat(settings.get(s).toString());
     }
 }
