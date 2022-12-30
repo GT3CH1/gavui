@@ -63,7 +63,7 @@ public class Gui {
     /**
      * The offset used for the symbol (y).
      */
-    int symbolOffsetY = 2;
+    int symbolOffsetY = 1;
     /**
      * Whether this element is a parent.
      */
@@ -266,7 +266,7 @@ public class Gui {
     public void shrinkForScrollbar(Gui parent) {
         if (shrunkForScroll && this.getWidth() == parent.getWidth()) return;
         if (this.getWidth() == parent.getWidth())
-            this.setWidth(getWidth() - 5);
+            this.setWidth(getWidth() - 7);
         shrunkForScroll = true;
     }
 
@@ -291,11 +291,11 @@ public class Gui {
 
     public void render(MatrixStack matrixStack, TextRenderer tr, int mouseX, int mouseY, float delta) {
         if (isHidden()) return;
-        GuiUtil.drawBox(backgroundColor.getAsFloatArray(), (int) getX(), (int) getY(), (int) getX2(), (int) getY2() + 1, matrixStack);
+        GuiUtil.drawBox(backgroundColor.getAsFloatArray(), getBox(), matrixStack);
         tr.draw(matrixStack, title, (int) getX() + 2, (int) getY() + 2, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
         if (symbol != '\0')
-            tr.draw(matrixStack, String.valueOf(symbol), (int) getX2() + symbolOffsetX, (int) getY() + symbolOffsetY, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
-        GuiUtil.drawOutline(Colors.WHITE.getAsFloatArray(), (int) getX(), (int) getY(), (int) getX2(), (int) getY2() + 1, matrixStack);
+            tr.draw(matrixStack, String.valueOf(symbol), (float) (getX2() + -9), (float) (getY() + 1.75), (GavUISettings.getColor("gui.color.foreground")).getAsInt());
+        GuiUtil.drawOutline(Colors.WHITE.getAsFloatArray(), box, matrixStack);
         if (hasChildren())
             for (Gui c : children)
                 c.render(matrixStack, tr, mouseX, mouseY, delta);
@@ -357,6 +357,10 @@ public class Gui {
         this.dragging = dragging;
         for (Gui child : children)
             child.setDragging(dragging);
+    }
+
+    public BoxD getBox() {
+        return box;
     }
 
     /**

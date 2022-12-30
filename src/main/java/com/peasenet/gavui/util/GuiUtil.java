@@ -77,11 +77,7 @@ public class GuiUtil {
      * @param bufferBuilder - The buffer to draw with.
      */
     public static void drawBox(int xt1, int yt1, int xt2, int yt2, Matrix4f matrix, BufferBuilder bufferBuilder) {
-        bufferBuilder.vertex(matrix, xt1, yt1, 0).next();
-        bufferBuilder.vertex(matrix, xt1, yt2, 0).next();
-        bufferBuilder.vertex(matrix, xt2, yt2, 0).next();
-        bufferBuilder.vertex(matrix, xt2, yt1, 0).next();
-        bufferBuilder.vertex(matrix, xt1, yt1, 0).next();
+
 
     }
 
@@ -114,11 +110,29 @@ public class GuiUtil {
      * @param matrixStack - The matrix stack to draw with.
      */
     public static void drawOutline(float[] acColor, BoxD box, MatrixStack matrixStack) {
-        drawOutline(acColor, (int) box.getTopLeft().x(), (int) box.getTopLeft().y(), (int) box.getBottomRight().x(), (int) box.getBottomRight().y(), matrixStack);
+        RenderSystem.setShader(GameRenderer::getPositionProgram);
+        RenderSystem.enableBlend();
+        var matrix = matrixStack.peek().getPositionMatrix();
+        var bufferBuilder = Tessellator.getInstance().getBuffer();
+        RenderSystem.setShaderColor(acColor[0], acColor[1], acColor[2], 1.0F);
+        bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION);
+
+        var xt1 = (float) box.getTopLeft().x();
+        var yt1 = (float) box.getTopLeft().y();
+        var xt2 = (float) box.getBottomRight().x();
+        var yt2 = (float) box.getBottomRight().y();
+        bufferBuilder.vertex(matrix, xt1, yt1, 0).next();
+        bufferBuilder.vertex(matrix, xt1, yt2, 0).next();
+        bufferBuilder.vertex(matrix, xt2, yt2, 0).next();
+        bufferBuilder.vertex(matrix, xt2, yt1, 0).next();
+        bufferBuilder.vertex(matrix, xt1, yt1, 0).next();
+        Tessellator.getInstance().draw();
+
     }
 
+
     /**
-     * Draws an outline of the given coordinates with the given color.
+     * Tessellator.getInstance().draw();                                                       * Draws an outline of the given coordinates with the given color.
      *
      * @param acColor     - The color to draw the outline with.
      * @param xt1         - The x coordinate of the top left corner of the box.
@@ -128,14 +142,7 @@ public class GuiUtil {
      * @param matrixStack - The matrix stack to draw with.
      */
     public static void drawOutline(float[] acColor, int xt1, int yt1, int xt2, int yt2, MatrixStack matrixStack) {
-        RenderSystem.setShader(GameRenderer::getPositionProgram);
-        RenderSystem.enableBlend();
-        var matrix = matrixStack.peek().getPositionMatrix();
-        var bufferBuilder = Tessellator.getInstance().getBuffer();
-        RenderSystem.setShaderColor(acColor[0], acColor[1], acColor[2], 1.0F);
-        bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION);
-        drawBox(xt1, yt1, xt2, yt2, matrix, bufferBuilder);
 
-        Tessellator.getInstance().draw();
+
     }
 }
