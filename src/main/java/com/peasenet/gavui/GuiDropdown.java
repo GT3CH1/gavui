@@ -72,7 +72,8 @@ public class GuiDropdown extends GuiDraggable {
     @Override
     public void render(MatrixStack matrixStack, TextRenderer tr, int mouseX, int mouseY, float delta) {
         updateSymbol();
-        tr.draw(matrixStack, String.valueOf(symbol), (int) getX2() + symbolOffsetX, (int) getY() + symbolOffsetY, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
+        var textColor = frozen() ? GavUISettings.getColor("gui.color.frozen") : GavUISettings.getColor("gui.color.foreground");
+        tr.draw(matrixStack, String.valueOf(symbol), getX2() + symbolOffsetX, getY() + symbolOffsetY, textColor.getAsInt());
         super.render(matrixStack, tr, mouseX, mouseY, delta);
         if (!isOpen()) return;
         var toRender = children.stream().filter(child -> !child.isHidden());

@@ -63,12 +63,13 @@ public class GavUISettings {
      * If the load fails, the default settings will be used.
      */
     private GavUISettings() {
-        default_settings.put("gui.color.background", (Colors.INDIGO));
+        default_settings.put("gui.color.background", (Colors.BLACK));
         default_settings.put("gui.color.foreground", (Colors.WHITE));
-        default_settings.put("gui.color.category", (Colors.DARK_SPRING_GREEN));
-        default_settings.put("gui.color.enabled", (Colors.MEDIUM_SEA_GREEN));
+        default_settings.put("gui.color.category", (Colors.INDIGO));
+        default_settings.put("gui.color.enabled", (Colors.CYAN));
         default_settings.put("gui.sound", false);
         default_settings.put("gui.alpha", 0.5f);
+        default_settings.put("gui.color.frozen", (Colors.RED));
         load();
     }
 

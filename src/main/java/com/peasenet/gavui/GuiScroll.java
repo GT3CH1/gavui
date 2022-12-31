@@ -106,20 +106,19 @@ public class GuiScroll extends GuiDropdown {
         else setBackground(GavUISettings.getColor("gui.color.background"));
         GuiUtil.drawBox(getBackgroundColor().getAsFloatArray(), getBox(), matrixStack);
         var t = title;
-        if (frozen())
-            t = t.copy().append(" (!)");
-        tr.draw(matrixStack, t, getX() + 2, getY() + 1.5f, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
+//        if (frozen())
+//            t = t.copy().append(" (!)");
+        var textColor = frozen() ? GavUISettings.getColor("gui.color.frozen") : GavUISettings.getColor("gui.color.foreground");
+        tr.draw(matrixStack, t, getX() + 2, getY() + 1.5f, textColor.getAsInt());
         updateSymbol();
-        var s = String.valueOf(symbol);
 
+        var s = String.valueOf(symbol);
         var x = getX2() + symbolOffsetX;
         var y = getY() + symbolOffsetY;
 
         switch (getDirection()) {
-            case DOWN ->
-                    tr.draw(matrixStack, s, x, y - 1.5f, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
-            case RIGHT ->
-                    tr.draw(matrixStack, s, x, getY() + 1.5f, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
+            case DOWN -> tr.draw(matrixStack, s, x, y - 1.0f, textColor.getAsInt());
+            case RIGHT -> tr.draw(matrixStack, s, x, getY() + 1.5f, textColor.getAsInt());
             default -> {
             }
         }
