@@ -87,6 +87,8 @@ public class GuiSlider extends Gui {
     private void setValue(double mouseX) {
         value = (float) ((mouseX - getX()) / (getWidth() - 2));
         value = Math.max(0, Math.min(1, value));
+        // round to 2 decimal places
+        value = Math.round(value * 100) / 100f;
         if (callback != null)
             callback.callback();
     }
