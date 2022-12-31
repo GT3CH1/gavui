@@ -20,7 +20,7 @@
 
 package com.peasenet.gavui;
 
-import com.peasenet.gavui.math.PointD;
+import com.peasenet.gavui.math.PointF;
 import net.minecraft.text.Text;
 
 /**
@@ -43,7 +43,7 @@ public class GuiDraggable extends GuiClick {
      * @param height   - The height of the gui.
      * @param title    - The title of the gui.
      */
-    public GuiDraggable(PointD position, int width, int height, Text title) {
+    public GuiDraggable(PointF position, int width, int height, Text title) {
         super(position, width, height, title);
     }
 
@@ -70,7 +70,7 @@ public class GuiDraggable extends GuiClick {
         if (frozen())
             return false;
         var childOverride = false;
-        setMidPoint(new PointD(mouseX, mouseY));
+        setMidPoint(new PointF(mouseX, mouseY));
         return true;
     }
 

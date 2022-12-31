@@ -21,7 +21,7 @@
 package com.peasenet.gavui.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.peasenet.gavui.math.BoxD;
+import com.peasenet.gavui.math.BoxF;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import org.joml.Matrix4f;
@@ -38,7 +38,7 @@ public class GuiUtil {
      * @param box         - The box to draw.
      * @param matrixStack - The matrix stack to draw with.
      */
-    public static void drawBox(float[] acColor, BoxD box, MatrixStack matrixStack) {
+    public static void drawBox(float[] acColor, BoxF box, MatrixStack matrixStack) {
         drawBox(acColor, box, matrixStack, GavUISettings.getFloat("gui.alpha"));
     }
 
@@ -47,7 +47,7 @@ public class GuiUtil {
      * @param box         - The box to draw.
      * @param matrixStack - The matrix stack to draw with.
      */
-    public static void drawBox(float[] acColor, BoxD box, MatrixStack matrixStack, float alpha) {
+    public static void drawBox(float[] acColor, BoxF box, MatrixStack matrixStack, float alpha) {
         float xt1 = (float) box.getTopLeft().x();
         float yt1 = (float) box.getTopLeft().y();
         float xt2 = (float) box.getBottomRight().x();
@@ -109,7 +109,7 @@ public class GuiUtil {
      * @param box         - The outline of a box to draw.
      * @param matrixStack - The matrix stack to draw with.
      */
-    public static void drawOutline(float[] acColor, BoxD box, MatrixStack matrixStack) {
+    public static void drawOutline(float[] acColor, BoxF box, MatrixStack matrixStack) {
         RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.enableBlend();
         var matrix = matrixStack.peek().getPositionMatrix();

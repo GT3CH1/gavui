@@ -22,8 +22,8 @@ package com.peasenet.gavui;
 
 import com.peasenet.gavui.color.Color;
 import com.peasenet.gavui.color.Colors;
-import com.peasenet.gavui.math.BoxD;
-import com.peasenet.gavui.math.PointD;
+import com.peasenet.gavui.math.BoxF;
+import com.peasenet.gavui.math.PointF;
 import com.peasenet.gavui.util.GavUISettings;
 import com.peasenet.gavui.util.GuiUtil;
 import net.minecraft.client.font.TextRenderer;
@@ -43,7 +43,7 @@ public class Gui {
     /**
      * The original position of the gui.
      */
-    protected final BoxD defaultPosition;
+    protected final BoxF defaultPosition;
     private final UUID uuid = UUID.randomUUID();
     /**
      * The list of buttons(mods) in this dropdown.
@@ -72,7 +72,7 @@ public class Gui {
     /**
      * The box that contains the gui.
      */
-    private BoxD box;
+    private BoxF box;
     /**
      * The background color of the gui.
      */
@@ -98,9 +98,9 @@ public class Gui {
      * @param height  - The height of the gui.
      * @param title   - The title of the gui.
      */
-    public Gui(PointD topLeft, int width, int height, Text title) {
-        box = new BoxD(topLeft, width, height);
-        defaultPosition = BoxD.copy(box);
+    public Gui(PointF topLeft, int width, int height, Text title) {
+        box = new BoxF(topLeft, width, height);
+        defaultPosition = BoxF.copy(box);
         this.title = title;
         dragging = false;
     }
@@ -164,7 +164,7 @@ public class Gui {
      */
     public void addElement(Gui child) {
         if (children.isEmpty()) {
-            child.setPosition(new PointD(getX2() + 100, getY2() + 1));
+            child.setPosition(new PointF(getX2() + 100, getY2() + 1));
             children.add(child);
             return;
         }
@@ -172,7 +172,7 @@ public class Gui {
         Gui lastButton = children.get(children.size() - 1);
         var lastY = lastButton.getY2();
         // set new gui position
-        child.setPosition(new PointD(getX(), lastY + 2));
+        child.setPosition(new PointF(getX(), lastY + 2));
         children.add(child);
     }
 
@@ -215,8 +215,8 @@ public class Gui {
      *
      * @return The x coordinate for the top left corner of the dropdown.
      */
-    public double getX() {
-        return box.getTopLeft().x();
+    public float getX() {
+        return box.getX1();
     }
 
     /**
@@ -224,8 +224,8 @@ public class Gui {
      *
      * @return The y coordinate for the top left corner of the dropdown.
      */
-    public double getY() {
-        return box.getTopLeft().y();
+    public float getY() {
+        return box.getY1();
     }
 
     /**
@@ -233,8 +233,8 @@ public class Gui {
      *
      * @return The x coordinate for the bottom right corner of the dropdown.
      */
-    public double getX2() {
-        return box.getBottomRight().x();
+    public float getX2() {
+        return box.getX2();
     }
 
     /**
@@ -242,8 +242,8 @@ public class Gui {
      *
      * @return The y coordinate for the bottom right corner of the dropdown.
      */
-    public double getY2() {
-        return box.getBottomRight().y();
+    public float getY2() {
+        return box.getY2();
     }
 
     /**
@@ -251,7 +251,7 @@ public class Gui {
      *
      * @return The width of the dropdown.
      */
-    public double getWidth() {
+    public float getWidth() {
         return box.getWidth();
     }
 
@@ -260,8 +260,8 @@ public class Gui {
      *
      * @param width - The width of the gui.
      */
-    public void setWidth(double width) {
-        box = new BoxD(box.getTopLeft(), width, box.getHeight());
+    public void setWidth(float width) {
+        box = new BoxF(box.getTopLeft(), width, box.getHeight());
     }
 
     public void shrinkForScrollbar(Gui parent) {
@@ -271,23 +271,12 @@ public class Gui {
         shrunkForScroll = true;
     }
 
-    public void shrinkForScrollbar() {
-        if (this.hasChildren()) {
-            for (Gui child : this.getChildren()) {
-                child.shrinkForScrollbar(this);
-            }
-        }
-        if (shrunkForScroll) return;
-        this.setWidth(getWidth() - 7);
-        shrunkForScroll = true;
-    }
-
     /**
      * Gets the height of the dropdown.
      *
      * @return The height of the dropdown.
      */
-    public double getHeight() {
+    public float getHeight() {
         return box.getHeight();
     }
 
@@ -304,9 +293,9 @@ public class Gui {
     public void render(MatrixStack matrixStack, TextRenderer tr, int mouseX, int mouseY, float delta) {
         if (isHidden()) return;
         GuiUtil.drawBox(backgroundColor.getAsFloatArray(), getBox(), matrixStack);
-        tr.draw(matrixStack, title, (int) getX() + 2, (int) getY() + 2, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
+        tr.draw(matrixStack, title, getX() + 2, getY() + 1.5f, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
         if (symbol != '\0')
-            tr.draw(matrixStack, String.valueOf(symbol), (float) (getX2() + -9), (float) (getY() + 1.5), (GavUISettings.getColor("gui.color.foreground")).getAsInt());
+            tr.draw(matrixStack, String.valueOf(symbol), getX2() - 9f, getY() + 1.5f, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
         GuiUtil.drawOutline(Colors.WHITE.getAsFloatArray(), box, matrixStack);
         if (hasChildren())
             for (Gui c : children)
@@ -371,7 +360,7 @@ public class Gui {
             child.setDragging(dragging);
     }
 
-    public BoxD getBox() {
+    public BoxF getBox() {
         return box;
     }
 
@@ -379,7 +368,7 @@ public class Gui {
      * Resets the position to the default position.
      */
     public void resetPosition() {
-        box = BoxD.copy(defaultPosition);
+        box = BoxF.copy(defaultPosition);
     }
 
     /**
@@ -387,7 +376,7 @@ public class Gui {
      *
      * @return The current location of the top left corner of the gui.
      */
-    public PointD getPosition() {
+    public PointF getPosition() {
         return box.getTopLeft();
     }
 
@@ -396,7 +385,7 @@ public class Gui {
      *
      * @param position - The point to set the top left corner of the gui element to.
      */
-    public void setPosition(PointD position) {
+    public void setPosition(PointF position) {
         box.setTopLeft(position);
     }
 
@@ -405,7 +394,7 @@ public class Gui {
      *
      * @param position - The point to set the middle of the gui element to.
      */
-    public void setMidPoint(PointD position) {
+    public void setMidPoint(PointF position) {
         box.setMiddle(position);
     }
 

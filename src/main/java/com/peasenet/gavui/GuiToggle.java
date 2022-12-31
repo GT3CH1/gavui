@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2022. Gavin Pease and contributors.
+ * Copyright (c) 2022-2022. Gavin Pease and contributors.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction, including
  * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
- *  of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
- *  following conditions:
+ * of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial
  * portions of the Software.
@@ -20,7 +20,7 @@
 
 package com.peasenet.gavui;
 
-import com.peasenet.gavui.math.PointD;
+import com.peasenet.gavui.math.PointF;
 import com.peasenet.gavui.util.GavUISettings;
 import com.peasenet.gavui.util.callbacks.GuiCallback;
 import net.minecraft.client.font.TextRenderer;
@@ -56,7 +56,7 @@ public class GuiToggle extends GuiClick {
      * @param height   - The height of the gui.
      * @param title    - The title of the gui.
      */
-    public GuiToggle(PointD position, int width, int height, Text title) {
+    public GuiToggle(PointF position, int width, int height, Text title) {
         super(position, width, height, title);
     }
 

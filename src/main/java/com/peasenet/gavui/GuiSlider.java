@@ -21,8 +21,8 @@
 package com.peasenet.gavui;
 
 import com.peasenet.gavui.color.Colors;
-import com.peasenet.gavui.math.BoxD;
-import com.peasenet.gavui.math.PointD;
+import com.peasenet.gavui.math.BoxF;
+import com.peasenet.gavui.math.PointF;
 import com.peasenet.gavui.util.GuiUtil;
 import com.peasenet.gavui.util.callbacks.GuiCallback;
 import net.minecraft.client.font.TextRenderer;
@@ -55,7 +55,7 @@ public class GuiSlider extends Gui {
      * @param height  - The height of the gui.
      * @param title   - The title of the gui.
      */
-    public GuiSlider(PointD topLeft, int width, int height, Text title) {
+    public GuiSlider(PointF topLeft, int width, int height, Text title) {
         super(topLeft, width, height, title);
     }
 
@@ -92,7 +92,7 @@ public class GuiSlider extends Gui {
     }
 
     private void drawTickMark(MatrixStack stack) {
-        var box = new BoxD(new PointD(((getX()) + ((getWidth() - 2) * value)), getY()), 1, getHeight());
+        var box = new BoxF(new PointF(((getX()) + ((getWidth() - 1) * value)), getY()), 1, getHeight());
         GuiUtil.drawBox(Colors.WHITE.getAsFloatArray(), box, stack, 0.75f);
     }
 }

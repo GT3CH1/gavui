@@ -21,7 +21,7 @@
 package com.peasenet.gavui;
 
 
-import com.peasenet.gavui.math.PointD;
+import com.peasenet.gavui.math.PointF;
 import com.peasenet.gavui.util.GavUISettings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -56,7 +56,7 @@ public class GuiDropdown extends GuiDraggable {
      * @param height   - The height of the dropdown.
      * @param title    - The title of the dropdown.
      */
-    public GuiDropdown(PointD position, int width, int height, Text title) {
+    public GuiDropdown(PointF position, int width, int height, Text title) {
         super(position, width, height, title);
     }
 
@@ -81,8 +81,8 @@ public class GuiDropdown extends GuiDraggable {
         for (int i = 0; i < toRenderList.size(); i++) {
             var child = toRenderList.get(i);
             switch (getDirection()) {
-                case DOWN -> child.setPosition(new PointD(getX(), getY2() + 2 + (i * 12)));
-                case RIGHT -> child.setPosition(new PointD(getX2() + 8, getY() + (i * 12)));
+                case DOWN -> child.setPosition(new PointF(getX(), getY2() + 2 + (i * 12)));
+                case RIGHT -> child.setPosition(new PointF(getX2() + 8, getY() + (i * 12)));
             }
             child.render(matrixStack, tr, mouseX, mouseY, delta);
         }
@@ -175,7 +175,7 @@ public class GuiDropdown extends GuiDraggable {
         // copy buttons to a new array
         for (Gui element : children) {
             if (getDirection() == Direction.RIGHT) {
-                element.setPosition(new PointD(getX2() + 12, getY2() + (children.size()) * 12));
+                element.setPosition(new PointF(getX2() + 12, getY2() + (children.size()) * 12));
             }
         }
 
@@ -203,7 +203,7 @@ public class GuiDropdown extends GuiDraggable {
     public void addElement(Gui element) {
         children.add(element);
         if (getDirection() == Direction.RIGHT) {
-            element.setPosition(new PointD(getX2() + 12, getY2() + (children.size()) * 12));
+            element.setPosition(new PointF(getX2() + 12, getY2() + (children.size()) * 12));
         }
         element.setWidth(getWidth());
     }
