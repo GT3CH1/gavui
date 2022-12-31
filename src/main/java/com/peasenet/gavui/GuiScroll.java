@@ -104,12 +104,11 @@ public class GuiScroll extends GuiDropdown {
         if (isHidden()) return;
         if (isParent()) setBackground(GavUISettings.getColor("gui.color.category"));
         else setBackground(GavUISettings.getColor("gui.color.background"));
-        var offset = shouldDrawScrollBar() ? 5 : 0;
         GuiUtil.drawBox(getBackgroundColor().getAsFloatArray(), getBox(), matrixStack);
         var t = title;
         if (frozen())
             t = t.copy().append(" (!)");
-        tr.draw(matrixStack, t, (int) getX() + 2, (int) getY() + 2, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
+        tr.draw(matrixStack, t, (float) getX() + 2, (float) getY() + 1.5f, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
         updateSymbol();
         var s = String.valueOf(symbol);
 
@@ -117,7 +116,8 @@ public class GuiScroll extends GuiDropdown {
         var y = (float) (getY() + symbolOffsetY);
 
         switch (getDirection()) {
-            case DOWN -> tr.draw(matrixStack, s, x, y-1, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
+            case DOWN ->
+                    tr.draw(matrixStack, s, x, y - 1.5f, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
             case RIGHT ->
                     tr.draw(matrixStack, s, (float) x, (float) (getY() + 1.5), (GavUISettings.getColor("gui.color.foreground")).getAsInt());
             default -> {
@@ -138,9 +138,9 @@ public class GuiScroll extends GuiDropdown {
             else
                 child.show();
             if (shouldDrawScrollBar()) {
+                child.shrinkForScrollbar(this);
                 drawScrollBox(matrixStack);
                 drawScrollBar(matrixStack);
-                child.shrinkForScrollbar(this);
             }
             if (!child.isParent() && !(child instanceof GuiCycle))
                 child.setBackground(GavUISettings.getColor("gui.color.background"));
@@ -226,11 +226,11 @@ public class GuiScroll extends GuiDropdown {
      * @param matrixStack - The matrix stack.
      */
     private void drawScrollBox(MatrixStack matrixStack) {
-        var scrollBoxX = getX() + getWidth() - 5;
+        var scrollBoxX = getX2() - 5;
         var scrollBoxY = (getY2()) + 2;
         var scrollBoxHeight = getScrollBoxHeight();
         if (getDirection() == Direction.RIGHT) {
-            scrollBoxX = children.get(page * maxChildren).getX2() + 0;
+            scrollBoxX = children.get(page * maxChildren).getX2() + 1;
             scrollBoxY = getY();
         }
         GuiUtil.drawBox(Colors.BLACK.getAsFloatArray(), new BoxD(new PointD(scrollBoxX, scrollBoxY), 5, scrollBoxHeight), matrixStack);
@@ -245,12 +245,12 @@ public class GuiScroll extends GuiDropdown {
     private void drawScrollBar(MatrixStack matrixStack) {
         var scrollBoxHeight = getScrollBoxHeight();
         var scrollBarY = (scrollBoxHeight * (page / (double) numPages)) + getY2() + 3;
-        var scrollBarX = getX() + getWidth() - 4;
+        var scrollBarX = getX2() - 4;
         var scrollBarY2 = ((scrollBarY) + (scrollBoxHeight / (numPages)));
         if (getDirection() == Direction.RIGHT) {
             // set scrollbarY to (1/page) * scrollBoxHeight
             scrollBarY = (scrollBoxHeight * (page / (double) numPages)) + getY() + 1;
-            scrollBarX = children.get(page * maxChildren).getX2();
+            scrollBarX = children.get(page * maxChildren).getX2() + 2;
             scrollBarY2 = ((scrollBarY) + (scrollBoxHeight / (numPages)));
         }
         GuiUtil.drawBox(Colors.WHITE.getAsFloatArray(), new BoxD(new PointD(scrollBarX, scrollBarY), 3, scrollBarY2 - scrollBarY - 2), matrixStack);

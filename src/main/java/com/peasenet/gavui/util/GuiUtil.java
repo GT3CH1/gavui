@@ -39,7 +39,7 @@ public class GuiUtil {
      * @param matrixStack - The matrix stack to draw with.
      */
     public static void drawBox(float[] acColor, BoxD box, MatrixStack matrixStack) {
-        drawBox(acColor, box, matrixStack, 0.5f);
+        drawBox(acColor, box, matrixStack, GavUISettings.getFloat("gui.alpha"));
     }
 
     /**

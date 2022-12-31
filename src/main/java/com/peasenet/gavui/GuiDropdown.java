@@ -82,7 +82,7 @@ public class GuiDropdown extends GuiDraggable {
             var child = toRenderList.get(i);
             switch (getDirection()) {
                 case DOWN -> child.setPosition(new PointD(getX(), getY2() + 2 + (i * 12)));
-                case RIGHT -> child.setPosition(new PointD(getX2() + 10, getY() + (i * 12)));
+                case RIGHT -> child.setPosition(new PointD(getX2() + 8, getY() + (i * 12)));
             }
             child.render(matrixStack, tr, mouseX, mouseY, delta);
         }

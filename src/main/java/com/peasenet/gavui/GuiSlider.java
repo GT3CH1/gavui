@@ -92,7 +92,7 @@ public class GuiSlider extends Gui {
     }
 
     private void drawTickMark(MatrixStack stack) {
-        var box = new BoxD(new PointD(((getX()) + ((getWidth() - 2) * value)), getY() - 0.25), 1, getHeight() + 0.75);
+        var box = new BoxD(new PointD(((getX()) + ((getWidth() - 2) * value)), getY()), 1, getHeight());
         GuiUtil.drawBox(Colors.WHITE.getAsFloatArray(), box, stack, 0.75f);
     }
 }

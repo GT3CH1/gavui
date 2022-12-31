@@ -44,6 +44,7 @@ public class Gui {
      * The original position of the gui.
      */
     protected final BoxD defaultPosition;
+    private final UUID uuid = UUID.randomUUID();
     /**
      * The list of buttons(mods) in this dropdown.
      */
@@ -266,7 +267,18 @@ public class Gui {
     public void shrinkForScrollbar(Gui parent) {
         if (shrunkForScroll && this.getWidth() == parent.getWidth()) return;
         if (this.getWidth() == parent.getWidth())
-            this.setWidth(getWidth() - 7);
+            this.setWidth(getWidth() - 6);
+        shrunkForScroll = true;
+    }
+
+    public void shrinkForScrollbar() {
+        if (this.hasChildren()) {
+            for (Gui child : this.getChildren()) {
+                child.shrinkForScrollbar(this);
+            }
+        }
+        if (shrunkForScroll) return;
+        this.setWidth(getWidth() - 7);
         shrunkForScroll = true;
     }
 
@@ -294,7 +306,7 @@ public class Gui {
         GuiUtil.drawBox(backgroundColor.getAsFloatArray(), getBox(), matrixStack);
         tr.draw(matrixStack, title, (int) getX() + 2, (int) getY() + 2, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
         if (symbol != '\0')
-            tr.draw(matrixStack, String.valueOf(symbol), (float) (getX2() + -9), (float) (getY() + 1.75), (GavUISettings.getColor("gui.color.foreground")).getAsInt());
+            tr.draw(matrixStack, String.valueOf(symbol), (float) (getX2() + -9), (float) (getY() + 1.5), (GavUISettings.getColor("gui.color.foreground")).getAsInt());
         GuiUtil.drawOutline(Colors.WHITE.getAsFloatArray(), box, matrixStack);
         if (hasChildren())
             for (Gui c : children)
@@ -432,8 +444,6 @@ public class Gui {
             for (Gui c : children)
                 c.setShrunkForScrollbar(b);
     }
-
-    private final UUID uuid = UUID.randomUUID();
 
     public UUID getUUID() {
         return uuid;
