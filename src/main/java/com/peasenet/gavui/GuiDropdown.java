@@ -38,6 +38,10 @@ import java.util.ArrayList;
  */
 public class GuiDropdown extends GuiDraggable {
 
+    public void setOpen(boolean open) {
+        isOpen = open;
+    }
+
     /**
      * Whether the dropdown is open.
      */
@@ -145,15 +149,11 @@ public class GuiDropdown extends GuiDraggable {
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         // calculate the offset between the mouse position and the top left corner of the gui
         if (super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)) {
-            var childOverride = false;
             for (var children : children) {
                 if (children.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)) {
-                    childOverride = true;
-                    break;
+                    return true;
                 }
             }
-            if (childOverride)
-                return false;
             isOpen = false;
             children.forEach(Gui::hide);
             resetDropdownsLocation();
@@ -172,7 +172,7 @@ public class GuiDropdown extends GuiDraggable {
     /**
      * Resets the position of all the mods in the dropdown.
      */
-    private void resetDropdownsLocation() {
+    protected void resetDropdownsLocation() {
         // copy buttons to a new array
         for (Gui element : children) {
             if (getDirection() == Direction.RIGHT) {

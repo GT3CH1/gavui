@@ -152,12 +152,11 @@ public class GuiScroll extends GuiDropdown {
     public boolean mouseScrolled(double x, double y, double scroll) {
         if (hasChildren() && isOpen()) {
             for (var gui : children) {
-                if (!gui.isHidden() && gui.mouseWithinGui(x, y) && gui instanceof GuiScroll) {
-                    gui.mouseScrolled(x, y, scroll);
-                    if (((GuiScroll) gui).isOpen()) ((GuiScroll) gui).doScroll(scroll);
-                    else {
+                if (!gui.isHidden() && gui.mouseWithinGui(x, y) && gui instanceof GuiScroll gs) {
+                    if (gs.isOpen())
+                        gui.mouseScrolled(x, y, scroll);
+                    else
                         doScroll(scroll);
-                    }
                     return true;
                 }
             }
@@ -374,15 +373,17 @@ public class GuiScroll extends GuiDropdown {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        if (isHidden() || !isOpen()) return false;
         for (Gui child : children) {
-            if ((child.mouseDragged(mouseX, mouseY, button, deltaX, deltaY) && child instanceof GuiSlider || (child.isDragging() && !child.isHidden()))) {
-                return false;
-            }
+            if (child.mouseDragged(mouseX, mouseY, button, deltaX, deltaY))
+                return true;
         }
-        if (super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)) {
-            resetChildPos();
-            return true;
-        }
-        return false;
+        if (frozen())
+            return false;
+        setMidPoint(new PointF(mouseX, mouseY));
+        setOpen(false);
+        children.forEach(Gui::hide);
+        resetDropdownsLocation();
+        return true;
     }
 }

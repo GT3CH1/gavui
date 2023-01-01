@@ -90,6 +90,12 @@ public class Gui {
      */
     private boolean shrunkForScroll = false;
 
+    protected static Gui clickedGui;
+
+    public static Gui getClickedGui() {
+        return clickedGui;
+    }
+
     /**
      * Creates a new GUI menu.
      *
@@ -358,6 +364,7 @@ public class Gui {
         this.dragging = dragging;
         for (Gui child : children)
             child.setDragging(dragging);
+        clickedGui = null;
     }
 
     public BoxF getBox() {
@@ -440,6 +447,7 @@ public class Gui {
 
     @Override
     public boolean equals(Object o) {
+        if (o == null) return false;
         if (o instanceof Gui g) {
             return g.getUUID().equals(uuid);
         }

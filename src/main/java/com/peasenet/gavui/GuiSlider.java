@@ -68,8 +68,9 @@ public class GuiSlider extends Gui {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        if (button == 0 && mouseWithinGui(mouseX, mouseY) && !isHidden()) {
+        if (button == 0 && (mouseWithinGui(mouseX, mouseY) || this.equals(clickedGui)) && !isHidden()) {
             setValue(mouseX);
+            clickedGui = this;
             return true;
         }
         return false;
@@ -79,6 +80,7 @@ public class GuiSlider extends Gui {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0 && mouseWithinGui(mouseX, mouseY) && !isHidden()) {
             setValue(mouseX);
+            clickedGui = this;
             return true;
         }
         return false;
