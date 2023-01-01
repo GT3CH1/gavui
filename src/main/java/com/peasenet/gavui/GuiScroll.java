@@ -106,8 +106,6 @@ public class GuiScroll extends GuiDropdown {
         else setBackground(GavUISettings.getColor("gui.color.background"));
         GuiUtil.drawBox(getBackgroundColor().getAsFloatArray(), getBox(), matrixStack);
         var t = title;
-//        if (frozen())
-//            t = t.copy().append(" (!)");
         var textColor = frozen() ? GavUISettings.getColor("gui.color.frozen") : GavUISettings.getColor("gui.color.foreground");
         tr.draw(matrixStack, t, getX() + 2, getY() + 1.5f, textColor.getAsInt());
         updateSymbol();
@@ -373,17 +371,27 @@ public class GuiScroll extends GuiDropdown {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        if (isHidden() || !isOpen()) return false;
+        if (!isOpen() && !isParent()) return false;
         for (Gui child : children) {
-            if (child.mouseDragged(mouseX, mouseY, button, deltaX, deltaY))
+            if (child.isHidden())
+                continue;
+            if (child.equals(clickedGui)) {
+                if (clickedGui.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)) {
+                    return true;
+                }
+            } else if (child.mouseDragged(mouseX, mouseY, button, deltaX, deltaY))
                 return true;
         }
-        if (frozen())
+        if (frozen() || !isParent())
             return false;
-        setMidPoint(new PointF(mouseX, mouseY));
-        setOpen(false);
-        children.forEach(Gui::hide);
-        resetDropdownsLocation();
-        return true;
+        // get if the mouse is within the title bar
+        if (mouseX >= getX() && mouseX <= getX2() && mouseY >= getY() && mouseY <= getY() + 12) {
+            setMidPoint(new PointF(mouseX, mouseY));
+            setOpen(false);
+            children.forEach(Gui::hide);
+            resetDropdownsLocation();
+            return true;
+        }
+        return false;
     }
 }

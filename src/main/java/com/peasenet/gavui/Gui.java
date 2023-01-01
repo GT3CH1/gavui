@@ -92,10 +92,6 @@ public class Gui {
 
     protected static Gui clickedGui;
 
-    public static Gui getClickedGui() {
-        return clickedGui;
-    }
-
     /**
      * Creates a new GUI menu.
      *
@@ -452,5 +448,9 @@ public class Gui {
             return g.getUUID().equals(uuid);
         }
         return false;
+    }
+
+    public void setDefaultPosition(PointF pos) {
+        defaultPosition.setTopLeft(pos);
     }
 }

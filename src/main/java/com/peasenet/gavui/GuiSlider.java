@@ -31,20 +31,7 @@ import net.minecraft.text.Text;
 
 public class GuiSlider extends Gui {
 
-    public void setCallback(GuiCallback callback) {
-        this.callback = callback;
-    }
-
     GuiCallback callback;
-
-    public float getValue() {
-        return value;
-    }
-
-    public void setValue(float value) {
-        this.value = value;
-    }
-
     float value;
 
     /**
@@ -59,6 +46,27 @@ public class GuiSlider extends Gui {
         super(topLeft, width, height, title);
     }
 
+    public void setCallback(GuiCallback callback) {
+        this.callback = callback;
+    }
+
+    public float getValue() {
+        return value;
+    }
+
+    public void setValue(float value) {
+        this.value = value;
+    }
+
+    private void setValue(double mouseX) {
+        value = (float) ((mouseX - getX()) / (getWidth() - 2));
+        value = Math.max(0, Math.min(1, value));
+        // round to 2 decimal places
+        value = Math.round(value * 100) / 100f;
+        if (callback != null)
+            callback.callback();
+    }
+
     @Override
     public void render(MatrixStack matrixStack, TextRenderer tr, int mouseX, int mouseY, float delta) {
         super.render(matrixStack, tr, mouseX, mouseY, delta);
@@ -68,7 +76,13 @@ public class GuiSlider extends Gui {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        if (button == 0 && (mouseWithinGui(mouseX, mouseY) || this.equals(clickedGui)) && !isHidden()) {
+        if (clickedGui != null && !clickedGui.equals(this))
+            return false;
+        if (this.equals(clickedGui) && !isHidden()) {
+            setValue(mouseX);
+            return true;
+        }
+        if ((button == 0 && (mouseWithinGui(mouseX, mouseY)))) {
             setValue(mouseX);
             clickedGui = this;
             return true;
@@ -81,18 +95,10 @@ public class GuiSlider extends Gui {
         if (button == 0 && mouseWithinGui(mouseX, mouseY) && !isHidden()) {
             setValue(mouseX);
             clickedGui = this;
+            GavUI.LOGGER.info("Clicked on slider " + getUUID());
             return true;
         }
         return false;
-    }
-
-    private void setValue(double mouseX) {
-        value = (float) ((mouseX - getX()) / (getWidth() - 2));
-        value = Math.max(0, Math.min(1, value));
-        // round to 2 decimal places
-        value = Math.round(value * 100) / 100f;
-        if (callback != null)
-            callback.callback();
     }
 
     private void drawTickMark(MatrixStack stack) {
