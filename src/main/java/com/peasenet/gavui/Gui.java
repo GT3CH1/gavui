@@ -450,7 +450,7 @@ public class Gui {
         return false;
     }
 
-    public void setDefaultPosition(PointF pos) {
-        defaultPosition.setTopLeft(pos);
+    public void setDefaultPosition(BoxF newDefaultPosition) {
+        defaultPosition.from(newDefaultPosition);
     }
 }

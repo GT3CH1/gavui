@@ -31,8 +31,8 @@ package com.peasenet.gavui.math;
  * y2 - The y coordinate of the bottom right corner.
  */
 public class BoxF {
-    private final float width;
-    private final float height;
+    private float width;
+    private float height;
     /**
      * The top left corner of the box.
      */
@@ -141,5 +141,11 @@ public class BoxF {
         return bottomRight.y();
     }
 
+    public void from(BoxF other) {
+        this.topLeft = other.topLeft;
+        this.bottomRight = other.bottomRight;
+        this.width = other.width;
+        this.height = other.height;
+    }
 
 }
