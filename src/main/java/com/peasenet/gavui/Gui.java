@@ -298,7 +298,7 @@ public class Gui {
         tr.draw(matrixStack, title, getX() + 2, getY() + 1.5f, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
         if (symbol != '\0')
             tr.draw(matrixStack, String.valueOf(symbol), getX2() - 9f, getY() + 1.5f, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
-        GuiUtil.drawOutline(Colors.WHITE.getAsFloatArray(), box, matrixStack);
+        GuiUtil.drawOutline(GavUISettings.getColor("gui.color.border").getAsFloatArray(), box, matrixStack);
         if (hasChildren())
             for (Gui c : children)
                 c.render(matrixStack, tr, mouseX, mouseY, delta);

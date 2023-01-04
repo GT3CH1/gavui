@@ -70,6 +70,7 @@ public class GavUISettings {
         default_settings.put("gui.sound", false);
         default_settings.put("gui.alpha", 0.5f);
         default_settings.put("gui.color.frozen", (Colors.RED));
+        default_settings.put("gui.color.border", (Colors.WHITE));
         load();
     }
 

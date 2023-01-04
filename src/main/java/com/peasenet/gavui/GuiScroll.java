@@ -120,7 +120,7 @@ public class GuiScroll extends GuiDropdown {
             default -> {
             }
         }
-        GuiUtil.drawOutline(Colors.WHITE.getAsFloatArray(), getBox(), matrixStack);
+        GuiUtil.drawOutline(GavUISettings.getColor("gui.color.border").getAsFloatArray(), getBox(), matrixStack);
 
         if (!isOpen()) return;
         resetChildPos();
