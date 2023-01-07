@@ -21,7 +21,6 @@
 package com.peasenet.gavui;
 
 import com.peasenet.gavui.math.PointF;
-import com.peasenet.gavui.util.GavUISettings;
 import com.peasenet.gavui.util.callbacks.GuiCallback;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -110,8 +109,8 @@ public class GuiToggle extends GuiClick {
         if (isHidden()) return;
         symbol = isOn ? '\u2611' : '\u2610';
         if (renderCallback != null) renderCallback.callback();
-        if (isOn()) setBackground(GavUISettings.getColor("gui.color.enabled"));
-        else setBackground(GavUISettings.getColor("gui.color.background"));
+        if (isOn()) setBackground(getGavUiEnabled());
+        else setBackground(getGavUiBg());
         super.render(matrixStack, tr, mouseX, mouseY, delta);
     }
 }

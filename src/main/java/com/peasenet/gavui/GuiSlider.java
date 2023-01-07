@@ -29,9 +29,22 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
+/**
+ * A gui that allows for controlling a value with a slider.
+ *
+ * @author gt3ch1
+ * @version 01/07/2022
+ */
 public class GuiSlider extends Gui {
 
+    /**
+     * Callback to be called when the slider is moved.
+     */
     GuiCallback callback;
+
+    /**
+     * The current value of the slider.
+     */
     float value;
 
     /**
@@ -46,18 +59,38 @@ public class GuiSlider extends Gui {
         super(topLeft, width, height, title);
     }
 
+    /**
+     * Sets the callback for when the slider is moved.
+     *
+     * @param callback - The callback to be called.
+     */
     public void setCallback(GuiCallback callback) {
         this.callback = callback;
     }
 
+    /**
+     * Gets the current value of the slider.
+     *
+     * @return The current value of the slider.
+     */
     public float getValue() {
         return value;
     }
 
+    /**
+     * Sets the current value of the slider.
+     *
+     * @param value - The value to set the slider to.
+     */
     public void setValue(float value) {
         this.value = value;
     }
 
+    /**
+     * Sets the current value of the slider based on the mouse position.
+     *
+     * @param mouseX - The x position of the mouse.
+     */
     private void setValue(double mouseX) {
         value = (float) ((mouseX - getX()) / (getWidth() - 2));
         value = Math.max(0, Math.min(1, value));
@@ -101,8 +134,13 @@ public class GuiSlider extends Gui {
         return false;
     }
 
+    /**
+     * Draws the tick mark on the slider.
+     *
+     * @param stack - The matrix stack to draw on.
+     */
     private void drawTickMark(MatrixStack stack) {
         var box = new BoxF(new PointF(((getX()) + ((getWidth() - 1) * value)), getY()), 1, getHeight());
-        GuiUtil.drawBox(Colors.WHITE.getAsFloatArray(), box, stack, 0.75f);
+        GuiUtil.drawBox(Colors.WHITE, box, stack, 0.75f);
     }
 }
