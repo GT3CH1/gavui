@@ -23,6 +23,7 @@ package com.peasenet.gavui.util;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.peasenet.gavui.color.Color;
 import com.peasenet.gavui.math.BoxF;
+import com.peasenet.gavui.math.PointF;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import org.joml.Matrix4f;
@@ -51,6 +52,7 @@ public class GuiUtil {
      * @param alpha       - The alpha value to draw with.
      */
     public static void drawBox(Color c, BoxF box, MatrixStack matrixStack, float alpha) {
+        alpha = Math.max(0, Math.min(1, alpha));
         var acColor = c.getAsFloatArray();
         RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.enableBlend();
@@ -82,6 +84,7 @@ public class GuiUtil {
      * @param alpha       - The alpha value to draw with.
      */
     public static void drawOutline(Color c, BoxF box, MatrixStack matrixStack, float alpha) {
+        alpha = Math.max(0, Math.min(1, alpha));
         var acColor = c.getAsFloatArray();
         RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.enableBlend();
@@ -110,6 +113,27 @@ public class GuiUtil {
         bufferBuilder.vertex(matrix, xt2, yt2, 0).next();
         bufferBuilder.vertex(matrix, xt2, yt1, 0).next();
         bufferBuilder.vertex(matrix, xt1, yt1, 0).next();
+        Tessellator.getInstance().draw();
+    }
+
+    /**
+     * Draws a single line to the given coordinates.
+     *
+     * @param color       - The color to draw the line with.
+     * @param matrixStack - The matrix stack to draw with.
+     * @param alpha       - The alpha value to draw with.
+     */
+    public static void renderSingleLine(Color color, PointF p1, PointF p2, MatrixStack matrixStack, float alpha) {
+        alpha = Math.max(0, Math.min(1, alpha));
+        var accColor = color.getAsFloatArray();
+        RenderSystem.setShader(GameRenderer::getPositionProgram);
+        RenderSystem.enableBlend();
+        var matrix = matrixStack.peek().getPositionMatrix();
+        var bufferBuilder = Tessellator.getInstance().getBuffer();
+        RenderSystem.setShaderColor(accColor[0], accColor[1], accColor[2], alpha);
+        bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION);
+        bufferBuilder.vertex(matrix, p1.x(), p1.y(), 0).next();
+        bufferBuilder.vertex(matrix, p2.x(), p2.y(), 0).next();
         Tessellator.getInstance().draw();
     }
 }
