@@ -66,11 +66,7 @@ public class GuiCycle extends GuiClick {
             // move the cycle index by the increment, wrapping around if necessary
             currentIndex = (currentIndex + increment);
             // y is modulo not working
-            if (currentIndex < 0) {
-                currentIndex = cycleSize - 1;
-            } else if (currentIndex >= cycleSize) {
-                currentIndex = 0;
-            }
+            currentIndex = currentIndex % cycleSize;
             if (GavUISettings.getBool("gui.sound")) {
                 MinecraftClient.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 1.0F, 1.0F);
             }
