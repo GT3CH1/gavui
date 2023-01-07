@@ -29,7 +29,7 @@ import net.minecraft.text.Text;
 
 /**
  * @author gt3ch1
- * @version 6/27/2022
+ * @version 01/07/2023
  * A gui element that cycles through a list of settings when clicked on.
  * A callback is called when clicked on.
  */
