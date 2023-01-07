@@ -43,7 +43,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author gt3ch1
- * @version 7/5/2022
+ * @version 01/07/2023
  * A class that contains all the settings for the mod.
  */
 public class GavUISettings {
@@ -63,6 +63,13 @@ public class GavUISettings {
      * If the load fails, the default settings will be used.
      */
     private GavUISettings() {
+
+    }
+
+    /**
+     * Initializes the settings.
+     */
+    public static void initialize() {
         default_settings.put("gui.color.background", (Colors.BLACK));
         default_settings.put("gui.color.foreground", (Colors.WHITE));
         default_settings.put("gui.color.category", (Colors.INDIGO));
@@ -72,13 +79,6 @@ public class GavUISettings {
         default_settings.put("gui.color.frozen", (Colors.RED));
         default_settings.put("gui.color.border", (Colors.WHITE));
         load();
-    }
-
-    /**
-     * Initializes the settings.
-     */
-    public static void initialize() {
-        new GavUISettings();
     }
 
     /**
@@ -95,7 +95,7 @@ public class GavUISettings {
             var writer = Files.newBufferedWriter(Paths.get(cfgFile));
             json.toJson(map, writer);
             writer.close();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
         load();
@@ -129,7 +129,8 @@ public class GavUISettings {
         var cfgFile = gavinsmodDir + "/settings.json";
         var gavinsModFile = new File(gavinsmodDir);
         if (!gavinsModFile.exists()) {
-            gavinsModFile.mkdir();
+            if (!gavinsModFile.mkdir())
+                throw new RuntimeException("Could not create gavui folder.");
         }
         return cfgFile;
     }
@@ -221,17 +222,6 @@ public class GavUISettings {
     }
 
     /**
-     * Sets the given key to the given value.
-     *
-     * @param key   - The key to set.
-     * @param value - The value to set.
-     */
-    public static void setBool(String key, boolean value) {
-        settings.put(key, value);
-        save();
-    }
-
-    /**
      * Adds a new setting to the settings list.
      *
      * @param key   - The key of the setting.
@@ -242,6 +232,12 @@ public class GavUISettings {
         save();
     }
 
+    /**
+     * Gets the float value of the given setting.
+     *
+     * @param s - The key of the setting.
+     * @return The float value of the setting.
+     */
     public static float getFloat(String s) {
         if (!settings.containsKey(s)) return 0;
         if (settings.get(s) == null) {
