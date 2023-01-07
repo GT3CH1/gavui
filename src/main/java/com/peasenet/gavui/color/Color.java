@@ -24,7 +24,7 @@ import java.io.Serializable;
 
 /**
  * @author gt3ch1
- * @version 7/5/2022
+ * @version 01/07/2022
  * A representation of a color. The maximum value for each channel is 255, and the minimum is 0.
  */
 public class Color implements Serializable {
@@ -134,5 +134,22 @@ public class Color implements Serializable {
      */
     public boolean equals(Color other) {
         return red == other.red && green == other.green && blue == other.blue;
+    }
+
+    public Color brighten(float amount) {
+        if (amount < 0)
+            amount = 0;
+        if (amount > 1)
+            amount = 1;
+        var newR = red + (int) (amount * 255);
+        var newG = green + (int) (amount * 255);
+        var newB = blue + (int) (amount * 255);
+        if (newR > 255)
+            newR = 255;
+        if (newG > 255)
+            newG = 255;
+        if (newB > 255)
+            newB = 255;
+        return new Color(newR, newG, newB);
     }
 }
