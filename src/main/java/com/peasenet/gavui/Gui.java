@@ -41,42 +41,60 @@ import java.util.UUID;
 public class Gui {
 
     /**
+     * The gui that was clicked.
+     */
+    protected static Gui clickedGui;
+
+    /**
      * The original position of the gui.
      */
     protected final BoxF defaultPosition;
+
+    /**
+     * A randomly generated UUID for this gui.
+     */
     private final UUID uuid = UUID.randomUUID();
+
     /**
      * The list of buttons(mods) in this dropdown.
      */
     protected ArrayList<Gui> children = new ArrayList<>();
+
     /**
      * The title of the gui.
      */
     protected Text title;
+
     /**
      * The symbol to be drawn to the left of the end of the box (like a checkbox, empty box, or arrow).
      */
     char symbol;
+
     /**
      * The offset used for the symbol (x).
      */
     int symbolOffsetX = -10;
+
     /**
      * The offset used for the symbol (y).
      */
     int symbolOffsetY = 1;
+
     /**
      * Whether this element is a parent.
      */
     private boolean isParent = false;
+
     /**
      * The box that contains the gui.
      */
     private BoxF box;
+
     /**
      * The background color of the gui.
      */
     private Color backgroundColor = Colors.INDIGO;
+
     /**
      * Whether this gui is currently being dragged.
      */
@@ -85,12 +103,15 @@ public class Gui {
      * Whether this gui is currently hidden.
      */
     private boolean hidden;
+
     /**
      * Whether this gui has been shrunk to fit a scrollbar.
      */
     private boolean shrunkForScroll = false;
-
-    protected static Gui clickedGui;
+    /**
+     * Whether this gui is currently being hovered over.
+     */
+    private boolean hoverable = true;
 
     /**
      * Creates a new GUI menu.
@@ -105,6 +126,24 @@ public class Gui {
         defaultPosition = BoxF.copy(box);
         this.title = title;
         dragging = false;
+    }
+
+    /**
+     * Whether this gui should be brightened when hovered.
+     *
+     * @return Whether this gui should be brightened when hovered.
+     */
+    public boolean isHoverable() {
+        return hoverable;
+    }
+
+    /**
+     * Whether this gui should be brightened when hovered.
+     *
+     * @param hoverable Whether this gui should be brightened when hovered.
+     */
+    public void setHoverable(boolean hoverable) {
+        this.hoverable = hoverable;
     }
 
     /**
@@ -266,6 +305,11 @@ public class Gui {
         box = new BoxF(box.getTopLeft(), width, box.getHeight());
     }
 
+    /**
+     * Shrinks the gui to fit a scrollbar.
+     *
+     * @param parent - The parent gui.
+     */
     public void shrinkForScrollbar(Gui parent) {
         if (shrunkForScroll && this.getWidth() == parent.getWidth()) return;
         if (this.getWidth() == parent.getWidth())
@@ -291,17 +335,43 @@ public class Gui {
      * @param mouseY      The y coordinate of the mouse.
      * @param delta       The change in time since the last render.
      */
-
     public void render(MatrixStack matrixStack, TextRenderer tr, int mouseX, int mouseY, float delta) {
         if (isHidden()) return;
-        GuiUtil.drawBox(backgroundColor.getAsFloatArray(), getBox(), matrixStack);
-        tr.draw(matrixStack, title, getX() + 2, getY() + 1.5f, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
+        var bg = backgroundColor;
+        if (mouseWithinGui(mouseX, mouseY) && hoverable)
+            bg = bg.brighten(0.25f);
+        GuiUtil.drawBox(bg, getBox(), matrixStack, getGavUiAlpha());
+        tr.draw(matrixStack, title, getX() + 2, getY() + 1.5f, getGavUiFg().getAsInt());
+        drawSymbol(matrixStack, tr);
+        GuiUtil.drawOutline(getGavUiBorder(), box, matrixStack);
+        renderChildren(matrixStack, tr, mouseX, mouseY, delta);
+    }
+
+    /**
+     * Draws the GUI symbol.
+     *
+     * @param matrixStack - The matrix stack to draw on.
+     * @param tr          - The text renderer to use.
+     */
+    private void drawSymbol(MatrixStack matrixStack, TextRenderer tr) {
         if (symbol != '\0')
-            tr.draw(matrixStack, String.valueOf(symbol), getX2() - 9f, getY() + 1.5f, (GavUISettings.getColor("gui.color.foreground")).getAsInt());
-        GuiUtil.drawOutline(GavUISettings.getColor("gui.color.border").getAsFloatArray(), box, matrixStack);
-        if (hasChildren())
-            for (Gui c : children)
-                c.render(matrixStack, tr, mouseX, mouseY, delta);
+            tr.draw(matrixStack, String.valueOf(symbol), getX2() - 9f, getY() + 1.5f, getGavUiFg().getAsInt());
+    }
+
+    /**
+     * Renders the children of this gui.
+     *
+     * @param matrixStack - The matrix stack to use to draw the children.
+     * @param tr          - The text renderer to use to draw the children.
+     * @param mouseX      - The x coordinate of the mouse.
+     * @param mouseY      - The y coordinate of the mouse.
+     * @param delta       - The change in time since the last render.
+     */
+    private void renderChildren(MatrixStack matrixStack, TextRenderer tr, int mouseX, int mouseY, float delta) {
+        if (!hasChildren())
+            return;
+        for (Gui c : children)
+            c.render(matrixStack, tr, mouseX, mouseY, delta);
     }
 
     /**
@@ -409,7 +479,7 @@ public class Gui {
      * @return Whether the mouse coordinates are within the bounds of the gui.
      */
     public boolean mouseWithinGui(double mouseX, double mouseY) {
-        return mouseX >= getX() && mouseX <= getX2() && mouseY >= getY() && mouseY <= getY2();
+        return mouseX >= getX() && mouseX <= getX2() && mouseY >= getY() && mouseY <= getY2() && !isHidden();
     }
 
     /**
@@ -448,6 +518,34 @@ public class Gui {
             return g.getUUID().equals(uuid);
         }
         return false;
+    }
+
+    protected Color getGavUiBg() {
+        return GavUISettings.getColor("gui.color.background");
+    }
+
+    protected Color getGavUiFg() {
+        return GavUISettings.getColor("gui.color.foreground");
+    }
+
+    protected Color getGavUiBorder() {
+        return GavUISettings.getColor("gui.color.border");
+    }
+
+    protected float getGavUiAlpha() {
+        return GavUISettings.getFloat("gui.alpha");
+    }
+
+    protected Color getGavUiFrozen() {
+        return GavUISettings.getColor("gui.color.frozen");
+    }
+
+    protected Color getGavUiCategory() {
+        return GavUISettings.getColor("gui.color.category");
+    }
+
+    protected Color getGavUiEnabled() {
+        return GavUISettings.getColor("gui.color.enabled");
     }
 
     public void setDefaultPosition(BoxF newDefaultPosition) {
