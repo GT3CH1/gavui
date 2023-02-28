@@ -54,14 +54,20 @@ public class GuiUtil {
     public static void drawBox(Color c, BoxF box, MatrixStack matrixStack, float alpha) {
         alpha = Math.max(0, Math.min(1, alpha));
         var acColor = c.getAsFloatArray();
+        var shader = RenderSystem.getShader();
         RenderSystem.setShader(GameRenderer::getPositionProgram);
         RenderSystem.enableBlend();
+        var shaderColors = RenderSystem.getShaderColor();
         RenderSystem.setShaderColor(acColor[0], acColor[1], acColor[2], alpha);
 
         var bufferBuilder = Tessellator.getInstance().getBuffer();
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION);
         var matrix = matrixStack.peek().getPositionMatrix();
         drawBox(box, matrix, bufferBuilder);
+//        RenderSystem.setShader(GameRenderer::get);
+        RenderSystem.applyModelViewMatrix();
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        RenderSystem.disableBlend();
     }
 
     /**
