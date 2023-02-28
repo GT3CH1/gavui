@@ -35,7 +35,7 @@ import java.util.UUID;
 
 /**
  * @author gt3ch1
- * @version 7/6/2022
+ * @version 2/28/2023
  * The base class for all gui elements.
  */
 public class Gui {
@@ -59,42 +59,34 @@ public class Gui {
      * The list of buttons(mods) in this dropdown.
      */
     protected ArrayList<Gui> children = new ArrayList<>();
-
     /**
      * The title of the gui.
      */
     protected Text title;
-
     /**
      * The symbol to be drawn to the left of the end of the box (like a checkbox, empty box, or arrow).
      */
     char symbol;
-
     /**
      * The offset used for the symbol (x).
      */
     int symbolOffsetX = -10;
-
     /**
      * The offset used for the symbol (y).
      */
     int symbolOffsetY = 1;
-
     /**
      * Whether this element is a parent.
      */
     private boolean isParent = false;
-
     /**
      * The box that contains the gui.
      */
     private BoxF box;
-
     /**
      * The background color of the gui.
      */
     private Color backgroundColor = Colors.INDIGO;
-
     /**
      * Whether this gui is currently being dragged.
      */
@@ -103,7 +95,6 @@ public class Gui {
      * Whether this gui is currently hidden.
      */
     private boolean hidden;
-
     /**
      * Whether this gui has been shrunk to fit a scrollbar.
      */
@@ -126,6 +117,19 @@ public class Gui {
         defaultPosition = BoxF.copy(box);
         this.title = title;
         dragging = false;
+    }
+
+    public Text getTitle() {
+        return title;
+    }
+
+    /**
+     * Sets the title of the gui.
+     *
+     * @param title - The title of the gui.
+     */
+    public void setTitle(Text title) {
+        this.title = title;
     }
 
     /**
@@ -162,15 +166,6 @@ public class Gui {
      */
     public void setParent(boolean parent) {
         isParent = parent;
-    }
-
-    /**
-     * Sets the title of the gui.
-     *
-     * @param title - The title of the gui.
-     */
-    public void setTitle(Text title) {
-        this.title = title;
     }
 
     /**
@@ -312,8 +307,7 @@ public class Gui {
      */
     public void shrinkForScrollbar(Gui parent) {
         if (shrunkForScroll && this.getWidth() == parent.getWidth()) return;
-        if (this.getWidth() == parent.getWidth())
-            this.setWidth(getWidth() - 6);
+        if (this.getWidth() == parent.getWidth()) this.setWidth(getWidth() - 6);
         shrunkForScroll = true;
     }
 
@@ -338,10 +332,9 @@ public class Gui {
     public void render(MatrixStack matrixStack, TextRenderer tr, int mouseX, int mouseY, float delta) {
         if (isHidden()) return;
         var bg = backgroundColor;
-        if (mouseWithinGui(mouseX, mouseY) && hoverable)
-            bg = bg.brighten(0.25f);
+        if (mouseWithinGui(mouseX, mouseY) && hoverable) bg = bg.brighten(0.25f);
         GuiUtil.drawBox(bg, getBox(), matrixStack, getGavUiAlpha());
-        tr.draw(matrixStack, title, getX() + 2, getY() + 1.5f, getGavUiFg().getAsInt());
+        tr.draw(matrixStack, title, getX() + 2f, getY() + 1.5f, getGavUiFg().getAsInt());
         drawSymbol(matrixStack, tr);
         GuiUtil.drawOutline(getGavUiBorder(), box, matrixStack);
         renderChildren(matrixStack, tr, mouseX, mouseY, delta);
@@ -368,8 +361,7 @@ public class Gui {
      * @param delta       - The change in time since the last render.
      */
     private void renderChildren(MatrixStack matrixStack, TextRenderer tr, int mouseX, int mouseY, float delta) {
-        if (!hasChildren())
-            return;
+        if (!hasChildren()) return;
         for (Gui c : children)
             c.render(matrixStack, tr, mouseX, mouseY, delta);
     }
@@ -502,9 +494,8 @@ public class Gui {
 
     public void setShrunkForScrollbar(boolean b) {
         shrunkForScroll = b;
-        if (hasChildren())
-            for (Gui c : children)
-                c.setShrunkForScrollbar(b);
+        if (hasChildren()) for (Gui c : children)
+            c.setShrunkForScrollbar(b);
     }
 
     public UUID getUUID() {
@@ -520,34 +511,74 @@ public class Gui {
         return false;
     }
 
+    /**
+     * Gets the background color from settings./
+     *
+     * @return The background color from settings.
+     */
     protected Color getGavUiBg() {
         return GavUISettings.getColor("gui.color.background");
     }
 
+    /**
+     * Gets the foreground color from settings.
+     *
+     * @return The foreground color from settings.
+     */
     protected Color getGavUiFg() {
         return GavUISettings.getColor("gui.color.foreground");
     }
 
+    /**
+     * Gets the border color from settings.
+     *
+     * @return The border color from settings.
+     */
     protected Color getGavUiBorder() {
         return GavUISettings.getColor("gui.color.border");
     }
 
+    /**
+     * Gets the alpha from settings.
+     *
+     * @return The alpha from settings.
+     */
     protected float getGavUiAlpha() {
         return GavUISettings.getFloat("gui.alpha");
     }
 
+    /**
+     * Gets the frozen element color from settings.
+     *
+     * @return The frozen element color from settings.
+     */
     protected Color getGavUiFrozen() {
         return GavUISettings.getColor("gui.color.frozen");
     }
 
+    /**
+     * Gets the category color from settings.
+     *
+     * @return The category color from settings.
+     */
     protected Color getGavUiCategory() {
         return GavUISettings.getColor("gui.color.category");
     }
 
+    /**
+     * Gets the color if an element is enabled from settings.
+     *
+     * @return The color if an element is enabled from settings.
+     */
     protected Color getGavUiEnabled() {
         return GavUISettings.getColor("gui.color.enabled");
     }
 
+    /**
+     * Sets the default position of the gui.
+     *
+     * @param newDefaultPosition - The new default position of the gui.
+     */
     public void setDefaultPosition(BoxF newDefaultPosition) {
         defaultPosition.from(newDefaultPosition);
     }
