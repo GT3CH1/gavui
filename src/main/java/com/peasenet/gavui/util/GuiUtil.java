@@ -100,6 +100,9 @@ public class GuiUtil {
         var bufferBuilder = Tessellator.getInstance().getBuffer();
         bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION);
         drawBox(box, matrix, bufferBuilder);
+        RenderSystem.applyModelViewMatrix();
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        RenderSystem.disableBlend();
     }
 
     /**
