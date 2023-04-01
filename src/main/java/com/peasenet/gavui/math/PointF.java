@@ -52,6 +52,18 @@ public record PointF(float x, float y) {
         return new PointF(x + other.x, y + other.y);
     }
 
+    public PointF add(double x, double y) {
+        return new PointF(this.x + x, this.y + y);
+    }
+
+    public PointF add(int x, int y) {
+        return new PointF(this.x + x, this.y + y);
+    }
+
+    public PointF add(float x, float y) {
+        return new PointF(this.x + x, this.y + y);
+    }
+
     /**
      * Subtracts two points together
      *
