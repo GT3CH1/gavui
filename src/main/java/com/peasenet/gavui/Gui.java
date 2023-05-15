@@ -27,7 +27,7 @@ import com.peasenet.gavui.math.PointF;
 import com.peasenet.gavui.util.GavUISettings;
 import com.peasenet.gavui.util.GuiUtil;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
@@ -323,47 +323,48 @@ public class Gui {
     /**
      * Renders the clickable ui
      *
-     * @param matrixStack The matrix stack used to draw boxes on screen.
+     * @param drawContext The draw context used to draw boxes on screen.
      * @param tr          The text render to use to draw text
      * @param mouseX      The x coordinate of the mouse.
      * @param mouseY      The y coordinate of the mouse.
      * @param delta       The change in time since the last render.
      */
-    public void render(MatrixStack matrixStack, TextRenderer tr, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext drawContext, TextRenderer tr, int mouseX, int mouseY, float delta) {
         if (isHidden()) return;
+        var matrixStack = drawContext.getMatrices();
         var bg = backgroundColor;
         if (mouseWithinGui(mouseX, mouseY) && hoverable) bg = bg.brighten(0.25f);
         GuiUtil.drawBox(bg, getBox(), matrixStack, getGavUiAlpha());
-        tr.draw(matrixStack, title, getX() + 2f, getY() + 1.5f, getGavUiFg().getAsInt());
-        drawSymbol(matrixStack, tr);
+        drawContext.drawText(tr, title.asOrderedText(), (int) (getX() + 2), (int) (getY() + 1), getGavUiFg().getAsInt(), false);
+        drawSymbol(drawContext, tr);
         GuiUtil.drawOutline(getGavUiBorder(), box, matrixStack);
-        renderChildren(matrixStack, tr, mouseX, mouseY, delta);
+        renderChildren(drawContext, tr, mouseX, mouseY, delta);
     }
 
     /**
      * Draws the GUI symbol.
      *
-     * @param matrixStack - The matrix stack to draw on.
+     * @param drawContext - The draw context to use.
      * @param tr          - The text renderer to use.
      */
-    private void drawSymbol(MatrixStack matrixStack, TextRenderer tr) {
+    private void drawSymbol(DrawContext drawContext, TextRenderer tr) {
         if (symbol != '\0')
-            tr.draw(matrixStack, String.valueOf(symbol), getX2() - 9f, getY() + 1.5f, getGavUiFg().getAsInt());
+            drawContext.drawText(tr, String.valueOf(symbol), (int) (getX2() - 9f), (int) (getY() + 1.5f), getGavUiFg().getAsInt(), false);
     }
 
     /**
      * Renders the children of this gui.
      *
-     * @param matrixStack - The matrix stack to use to draw the children.
+     * @param drawContext - The draw context to use to draw the children.
      * @param tr          - The text renderer to use to draw the children.
      * @param mouseX      - The x coordinate of the mouse.
      * @param mouseY      - The y coordinate of the mouse.
      * @param delta       - The change in time since the last render.
      */
-    private void renderChildren(MatrixStack matrixStack, TextRenderer tr, int mouseX, int mouseY, float delta) {
+    private void renderChildren(DrawContext drawContext, TextRenderer tr, int mouseX, int mouseY, float delta) {
         if (!hasChildren()) return;
         for (Gui c : children)
-            c.render(matrixStack, tr, mouseX, mouseY, delta);
+            c.render(drawContext, tr, mouseX, mouseY, delta);
     }
 
     /**

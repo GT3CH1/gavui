@@ -25,7 +25,7 @@ import com.peasenet.gavui.math.PointF;
 import com.peasenet.gavui.util.GavUISettings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 
@@ -38,15 +38,10 @@ import java.util.ArrayList;
  */
 public class GuiDropdown extends GuiDraggable {
 
-    public void setOpen(boolean open) {
-        isOpen = open;
-    }
-
     /**
      * Whether the dropdown is open.
      */
     private boolean isOpen;
-
     /**
      * The direction in which this element will "drop" to.
      */
@@ -73,12 +68,16 @@ public class GuiDropdown extends GuiDraggable {
         return isOpen;
     }
 
+    public void setOpen(boolean open) {
+        isOpen = open;
+    }
+
     @Override
-    public void render(MatrixStack matrixStack, TextRenderer tr, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext drawContext, TextRenderer tr, int mouseX, int mouseY, float delta) {
         updateSymbol();
         var textColor = frozen() ? GavUISettings.getColor("gui.color.frozen") : GavUISettings.getColor("gui.color.foreground");
-        tr.draw(matrixStack, String.valueOf(symbol), getX2() + symbolOffsetX, getY() + symbolOffsetY, textColor.getAsInt());
-        super.render(matrixStack, tr, mouseX, mouseY, delta);
+        drawContext.drawText(tr, String.valueOf(symbol), (int) (getX2() + symbolOffsetX), (int) (getY() + symbolOffsetY), textColor.getAsInt(), false);
+        super.render(drawContext, tr, mouseX, mouseY, delta);
         if (!isOpen()) return;
         var toRender = children.stream().filter(child -> !child.isHidden());
         // convert toRender to ArrayList
@@ -89,7 +88,7 @@ public class GuiDropdown extends GuiDraggable {
                 case DOWN -> child.setPosition(new PointF(getX(), getY2() + 2 + (i * 12)));
                 case RIGHT -> child.setPosition(new PointF(getX2() + 8, getY() + (i * 12)));
             }
-            child.render(matrixStack, tr, mouseX, mouseY, delta);
+            child.render(drawContext, tr, mouseX, mouseY, delta);
         }
     }
 

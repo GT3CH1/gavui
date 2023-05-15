@@ -26,7 +26,7 @@ import com.peasenet.gavui.math.PointF;
 import com.peasenet.gavui.util.GuiUtil;
 import com.peasenet.gavui.util.callbacks.GuiCallback;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 
 /**
@@ -101,10 +101,10 @@ public class GuiSlider extends Gui {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, TextRenderer tr, int mouseX, int mouseY, float delta) {
-        super.render(matrixStack, tr, mouseX, mouseY, delta);
+    public void render(DrawContext drawContext, TextRenderer tr, int mouseX, int mouseY, float delta) {
+        super.render(drawContext, tr, mouseX, mouseY, delta);
         if (!isHidden())
-            drawTickMark(matrixStack);
+            drawTickMark(drawContext);
     }
 
     @Override
@@ -137,10 +137,10 @@ public class GuiSlider extends Gui {
     /**
      * Draws the tick mark on the slider.
      *
-     * @param stack - The matrix stack to draw on.
+     * @param drawContext - The draw matrix to draw on.
      */
-    private void drawTickMark(MatrixStack stack) {
+    private void drawTickMark(DrawContext drawContext) {
         var box = new BoxF(new PointF(((getX()) + ((getWidth() - 1) * value)), getY()), 1, getHeight());
-        GuiUtil.drawBox(Colors.WHITE, box, stack, 0.75f);
+        GuiUtil.drawBox(Colors.WHITE, box, drawContext.getMatrices(), 0.75f);
     }
 }

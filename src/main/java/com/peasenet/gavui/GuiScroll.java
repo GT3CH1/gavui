@@ -26,6 +26,7 @@ import com.peasenet.gavui.math.BoxF;
 import com.peasenet.gavui.math.PointF;
 import com.peasenet.gavui.util.GuiUtil;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
@@ -108,7 +109,7 @@ public class GuiScroll extends GuiDropdown {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, TextRenderer tr, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext drawContext, TextRenderer tr, int mouseX, int mouseY, float delta) {
         if (isHidden()) return;
         var bg = getBackgroundColor();
 
@@ -120,12 +121,13 @@ public class GuiScroll extends GuiDropdown {
         if (mouseWithinGui(mouseX, mouseY) && !childHasMouse) {
             bg = bg.brighten(0.5f);
         }
-        GuiUtil.drawBox(bg, getBox(), matrixStack, getGavUiAlpha());
+        GuiUtil.drawBox(bg, getBox(), drawContext.getMatrices(), getGavUiAlpha());
         var t = title;
         var textColor = frozen() ? getGavUiFrozen() : getGavUiFg();
-        tr.draw(matrixStack, t, getX() + 2, getY() + 1.5f, textColor.getAsInt());
-        renderSymbol(matrixStack, tr, textColor);
-        GuiUtil.drawOutline(getGavUiBorder(), getBox(), matrixStack);
+//        tr.draw(matrixStack, t, getX() + 2, getY() + 1.5f, textColor.getAsInt());
+        drawContext.drawText(tr, t.asOrderedText(), (int) (getX() + 2), (int) (getY() + 1.5f), textColor.getAsInt(), false);
+        renderSymbol(drawContext, tr, textColor);
+        GuiUtil.drawOutline(getGavUiBorder(), getBox(), drawContext.getMatrices());
         if (!isOpen()) return;
         resetChildPos();
 
@@ -133,10 +135,10 @@ public class GuiScroll extends GuiDropdown {
         if (page >= numPages) page = numPages - 1;
 
         for (int i = 0; i < children.size(); i++)
-            renderChildren(matrixStack, tr, mouseX, mouseY, delta, i);
+            renderChildren(drawContext, tr, mouseX, mouseY, delta, i);
     }
 
-    private void renderSymbol(MatrixStack matrixStack, TextRenderer tr, Color textColor) {
+    private void renderSymbol(DrawContext drawContext, TextRenderer tr, Color textColor) {
         updateSymbol();
 
         var s = String.valueOf(symbol);
@@ -144,15 +146,16 @@ public class GuiScroll extends GuiDropdown {
         var y = getY() + symbolOffsetY;
 
         switch (getDirection()) {
-            case DOWN -> tr.draw(matrixStack, s, x, y - 1.0f, textColor.getAsInt());
-            case RIGHT -> tr.draw(matrixStack, s, x, getY() + 1.5f, textColor.getAsInt());
+            case DOWN -> drawContext.drawText(tr, s, (int) x, (int) (y - 1.0f), textColor.getAsInt(), false);
+            case RIGHT -> drawContext.drawText(tr, s, (int) x, (int) (getY() + 1.5f), textColor.getAsInt(), false);
             default -> {
             }
         }
     }
 
-    private void renderChildren(MatrixStack matrixStack, TextRenderer tr, int mouseX, int mouseY, float delta, int i) {
+    private void renderChildren(DrawContext drawContext, TextRenderer tr, int mouseX, int mouseY, float delta, int i) {
         var child = children.get(i);
+        var matrixStack = drawContext.getMatrices();
         if (i < page * maxChildren || i >= (page + 1) * maxChildren) child.hide();
         else child.show();
         if (shouldDrawScrollBar()) {
@@ -163,7 +166,7 @@ public class GuiScroll extends GuiDropdown {
         if (!child.isParent() && !(child instanceof GuiCycle)) {
             child.setBackground(getGavUiBg());
         }
-        child.render(matrixStack, tr, mouseX, mouseY, delta);
+        child.render(drawContext, tr, mouseX, mouseY, delta);
     }
 
 
