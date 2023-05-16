@@ -335,7 +335,7 @@ public class Gui {
         var bg = backgroundColor;
         if (mouseWithinGui(mouseX, mouseY) && hoverable) bg = bg.brighten(0.25f);
         GuiUtil.drawBox(bg, getBox(), matrixStack, getGavUiAlpha());
-        drawContext.drawText(tr, title.asOrderedText(), (int) (getX() + 2), (int) (getY() + 1), getGavUiFg().getAsInt(), false);
+        drawText(drawContext, tr, title, getX() + 2, getY() + 1.5f, getGavUiFg(), false);
         drawSymbol(drawContext, tr);
         GuiUtil.drawOutline(getGavUiBorder(), box, matrixStack);
         renderChildren(drawContext, tr, mouseX, mouseY, delta);
@@ -349,7 +349,7 @@ public class Gui {
      */
     private void drawSymbol(DrawContext drawContext, TextRenderer tr) {
         if (symbol != '\0')
-            drawContext.drawText(tr, String.valueOf(symbol), (int) (getX2() - 9f), (int) (getY() + 1.5f), getGavUiFg().getAsInt(), false);
+            drawText(drawContext, tr, Text.of(String.valueOf(symbol)), getX2() - 9f, getY() + 1.5f, getGavUiFg(), false);
     }
 
     /**
@@ -582,5 +582,18 @@ public class Gui {
      */
     public void setDefaultPosition(BoxF newDefaultPosition) {
         defaultPosition.from(newDefaultPosition);
+    }
+
+    //NOTE: I wrote this so that I don't have to deal with the API in drawContext and I can just use the textRenderer directly.
+    protected void drawText(DrawContext drawContext, TextRenderer textRenderer, Text text, float x, float y, Color color, boolean shadow) {
+        textRenderer.draw(text, x, y, color.getAsInt(), shadow, drawContext.getMatrices().peek().getPositionMatrix(), drawContext.getVertexConsumers(), TextRenderer.TextLayerType.NORMAL, 0, 15728880);
+    }
+
+    protected void drawText(DrawContext drawContext, TextRenderer textRenderer, String text, float x, float y, Color color) {
+        drawText(drawContext, textRenderer, Text.of(text), x, y, color, false);
+    }
+
+    protected void drawText(DrawContext drawContext, TextRenderer textRenderer, Text text, float x, float y, Color color) {
+        drawText(drawContext, textRenderer, text, x, y, color, false);
     }
 }

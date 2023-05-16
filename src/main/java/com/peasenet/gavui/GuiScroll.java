@@ -122,10 +122,8 @@ public class GuiScroll extends GuiDropdown {
             bg = bg.brighten(0.5f);
         }
         GuiUtil.drawBox(bg, getBox(), drawContext.getMatrices(), getGavUiAlpha());
-        var t = title;
         var textColor = frozen() ? getGavUiFrozen() : getGavUiFg();
-//        tr.draw(matrixStack, t, getX() + 2, getY() + 1.5f, textColor.getAsInt());
-        drawContext.drawText(tr, t.asOrderedText(), (int) (getX() + 2), (int) (getY() + 1.5f), textColor.getAsInt(), false);
+        drawText(drawContext, tr, title, getX() + 2, getY() + 1.5f, textColor);
         renderSymbol(drawContext, tr, textColor);
         GuiUtil.drawOutline(getGavUiBorder(), getBox(), drawContext.getMatrices());
         if (!isOpen()) return;
@@ -146,8 +144,8 @@ public class GuiScroll extends GuiDropdown {
         var y = getY() + symbolOffsetY;
 
         switch (getDirection()) {
-            case DOWN -> drawContext.drawText(tr, s, (int) x, (int) (y - 1.0f), textColor.getAsInt(), false);
-            case RIGHT -> drawContext.drawText(tr, s, (int) x, (int) (getY() + 1.5f), textColor.getAsInt(), false);
+            case DOWN -> drawText(drawContext, tr, s, x, (y - 1.0f), textColor);
+            case RIGHT -> drawText(drawContext, tr, s, x, (getY() + 1.5f), textColor);
             default -> {
             }
         }

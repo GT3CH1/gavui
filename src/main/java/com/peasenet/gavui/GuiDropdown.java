@@ -76,7 +76,7 @@ public class GuiDropdown extends GuiDraggable {
     public void render(DrawContext drawContext, TextRenderer tr, int mouseX, int mouseY, float delta) {
         updateSymbol();
         var textColor = frozen() ? GavUISettings.getColor("gui.color.frozen") : GavUISettings.getColor("gui.color.foreground");
-        drawContext.drawText(tr, String.valueOf(symbol), (int) (getX2() + symbolOffsetX), (int) (getY() + symbolOffsetY), textColor.getAsInt(), false);
+        drawText(drawContext, tr, String.valueOf(symbol), getX2() + symbolOffsetX, getY() + symbolOffsetY, textColor);
         super.render(drawContext, tr, mouseX, mouseY, delta);
         if (!isOpen()) return;
         var toRender = children.stream().filter(child -> !child.isHidden());
