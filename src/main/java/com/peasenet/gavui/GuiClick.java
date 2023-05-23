@@ -51,6 +51,11 @@ public class GuiClick extends Gui {
         super(position, width, height, title);
     }
 
+    public GuiClick(GuiBuilder builder) {
+        super(builder);
+        this.setCallback(builder.getCallback());
+    }
+
     /**
      * Sets the callback of this gui.
      *

@@ -58,6 +58,12 @@ public class GuiCycle extends GuiClick {
         setCycleSize(cycleSize);
     }
 
+    public GuiCycle(GuiBuilder builder) {
+        super(builder);
+        setCycleSize(builder.getCycleSize());
+        setCurrentIndex(builder.getCurrentCycleIndex());
+    }
+
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {

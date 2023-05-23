@@ -44,17 +44,14 @@ public class Gui {
      * The gui that was clicked.
      */
     protected static Gui clickedGui;
-
     /**
      * The original position of the gui.
      */
     protected final BoxF defaultPosition;
-
     /**
      * A randomly generated UUID for this gui.
      */
     private final UUID uuid = UUID.randomUUID();
-
     /**
      * The list of buttons(mods) in this dropdown.
      */
@@ -63,6 +60,7 @@ public class Gui {
      * The title of the gui.
      */
     protected Text title;
+    protected String translationKey;
     /**
      * The symbol to be drawn to the left of the end of the box (like a checkbox, empty box, or arrow).
      */
@@ -75,6 +73,8 @@ public class Gui {
      * The offset used for the symbol (y).
      */
     int symbolOffsetY = 1;
+    private float transparency;
+    private String settingKey;
     /**
      * Whether this element is a parent.
      */
@@ -117,6 +117,42 @@ public class Gui {
         defaultPosition = BoxF.copy(box);
         this.title = title;
         dragging = false;
+    }
+
+    public Gui(GuiBuilder builder) {
+        this.title = builder.getTitle();
+        box = new BoxF(builder.getTopLeft(), builder.getWidth(), builder.getHeight());
+        defaultPosition = BoxF.copy(box);
+        dragging = false;
+        this.translationKey = builder.getTranslationKey();
+        setBackground(builder.getBackgroundColor());
+        setHoverable(builder.isHoverable());
+        setSymbol(builder.getSymbol());
+        setHidden(builder.isHidden());
+        setHoverable(builder.isHoverable());
+        setTransparency(builder.getTransparency());
+    }
+
+    public float getTransparency() {
+        return transparency;
+    }
+
+    /**
+     * Sets the transparency of the gui. If set to -1, it will use the transparency of GavUI (set in the config).
+     *
+     * @param transparency - The transparency of the gui.
+     */
+    public void setTransparency(float transparency) {
+        this.transparency = transparency;
+        if (transparency < 0) {
+            this.transparency = 0f;
+        }
+        if (transparency > 1f) {
+            this.transparency = 1f;
+        }
+        if (transparency == -1) {
+            this.transparency = getGavUiAlpha();
+        }
     }
 
     public Text getTitle() {
@@ -221,20 +257,31 @@ public class Gui {
         return hidden;
     }
 
+    public void setHidden(boolean hidden) {
+        if (hidden) {
+            if (this.hasChildren()) {
+                children.forEach(Gui::hide);
+            }
+        } else {
+            if (this.hasChildren()) {
+                children.forEach(Gui::show);
+            }
+        }
+        this.hidden = hidden;
+    }
+
     /**
      * Hides this gui.
      */
     public void hide() {
-        hidden = true;
-        children.forEach(Gui::hide);
+        setHidden(true);
     }
 
     /**
      * Shows this gui.
      */
     public void show() {
-        hidden = false;
-        children.forEach(Gui::show);
+        setHidden(false);
     }
 
     /**
@@ -311,6 +358,7 @@ public class Gui {
         shrunkForScroll = true;
     }
 
+
     /**
      * Gets the height of the dropdown.
      *
@@ -334,8 +382,9 @@ public class Gui {
         var matrixStack = drawContext.getMatrices();
         var bg = backgroundColor;
         if (mouseWithinGui(mouseX, mouseY) && hoverable) bg = bg.brighten(0.25f);
-        GuiUtil.drawBox(bg, getBox(), matrixStack, getGavUiAlpha());
-        drawText(drawContext, tr, title, getX() + 2, getY() + 1.5f, getGavUiFg(), false);
+        GuiUtil.drawBox(bg, getBox(), matrixStack, getTransparency());
+        if (title != null)
+            drawText(drawContext, tr, title, getX() + 2, getY() + 1.5f, getGavUiFg(), false);
         drawSymbol(drawContext, tr);
         GuiUtil.drawOutline(getGavUiBorder(), box, matrixStack);
         renderChildren(drawContext, tr, mouseX, mouseY, delta);

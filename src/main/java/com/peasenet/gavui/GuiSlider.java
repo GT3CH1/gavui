@@ -59,6 +59,13 @@ public class GuiSlider extends Gui {
         super(topLeft, width, height, title);
     }
 
+    public GuiSlider(GuiBuilder builder) {
+        super(builder);
+        if (builder.getCallback() != null)
+            setCallback(builder.getCallback());
+        setValue(builder.getSlideValue());
+    }
+
     /**
      * Sets the callback for when the slider is moved.
      *

@@ -59,6 +59,12 @@ public class GuiDropdown extends GuiDraggable {
         super(position, width, height, title);
     }
 
+    public GuiDropdown(GuiBuilder builder) {
+        super(builder);
+        this.setOpen(builder.isOpen());
+
+    }
+
     /**
      * Gets whether the dropdown is open.
      *

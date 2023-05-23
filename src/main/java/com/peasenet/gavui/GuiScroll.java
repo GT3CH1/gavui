@@ -108,6 +108,21 @@ public class GuiScroll extends GuiDropdown {
         this(new PointF(0, 0), width, height, title);
     }
 
+    public GuiScroll(GuiBuilder builder) {
+        super(builder);
+        for (Gui gui : builder.getChildren()) {
+            gui.setWidth(getWidth());
+            this.children.add(gui);
+            if (getDirection() == Direction.RIGHT)
+                gui.setPosition(new PointF(getX2() + 14, getY2() + (this.children.size()) * 12));
+        }
+        this.defaultMaxChildren = builder.getDefaultMaxChildren();
+        this.maxChildren = builder.getMaxChildren();
+        this.maxChildren = Math.min(children.size(), this.maxChildren);
+        numPages = (int) Math.ceil((double) children.size() / (double) maxChildren);
+        page = 0;
+    }
+
     @Override
     public void render(DrawContext drawContext, TextRenderer tr, int mouseX, int mouseY, float delta) {
         if (isHidden()) return;
@@ -154,8 +169,11 @@ public class GuiScroll extends GuiDropdown {
     private void renderChildren(DrawContext drawContext, TextRenderer tr, int mouseX, int mouseY, float delta, int i) {
         var child = children.get(i);
         var matrixStack = drawContext.getMatrices();
-        if (i < page * maxChildren || i >= (page + 1) * maxChildren) child.hide();
-        else child.show();
+        if (i < page * maxChildren || i >= (page + 1) * maxChildren) {
+            child.hide();
+        } else {
+            child.show();
+        }
         if (shouldDrawScrollBar()) {
             child.shrinkForScrollbar(this);
             drawScrollBox(matrixStack);

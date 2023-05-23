@@ -47,6 +47,11 @@ public class GuiDraggable extends GuiClick {
         super(position, width, height, title);
     }
 
+    public GuiDraggable(GuiBuilder builder) {
+        super(builder);
+        this.setFrozen(builder.isFrozen());
+    }
+
     /**
      * Gets whether the dropdown is frozen, meaning it cannot be moved.
      *

@@ -59,6 +59,16 @@ public class GuiToggle extends GuiClick {
         super(position, width, height, title);
     }
 
+    public GuiToggle(int width, int height) {
+        super(new PointF(0, 0), width, height, Text.of("none"));
+    }
+
+    public GuiToggle(GuiBuilder builder) {
+        super(builder);
+        this.setState(builder.isOn());
+        this.setRenderCallback(builder.getRenderCallback());
+    }
+
     /**
      * Sets the current state of this toggle element.
      *
@@ -66,6 +76,7 @@ public class GuiToggle extends GuiClick {
      */
     public void setState(boolean on) {
         isOn = on;
+
     }
 
     /**
@@ -106,7 +117,8 @@ public class GuiToggle extends GuiClick {
 
     @Override
     public void render(DrawContext drawContext, TextRenderer tr, int mouseX, int mouseY, float delta) {
-        if (isHidden()) return;
+        if (isHidden())
+            return;
         symbol = isOn ? '\u2611' : '\u2610';
         if (renderCallback != null) renderCallback.callback();
         if (isOn()) setBackground(getGavUiEnabled());
