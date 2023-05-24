@@ -120,7 +120,8 @@ public class GuiToggle extends GuiClick {
         if (isHidden())
             return;
         symbol = isOn ? '\u2611' : '\u2610';
-        if (renderCallback != null) renderCallback.callback();
+        if (renderCallback != null)
+            renderCallback.callback();
         if (isOn()) setBackground(getGavUiEnabled());
         else setBackground(getGavUiBg());
         super.render(drawContext, tr, mouseX, mouseY, delta);

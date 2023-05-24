@@ -327,6 +327,11 @@ public class GuiBuilder {
         return new Gui(this);
     }
 
+    public GuiClick buildClick() {
+        validate();
+        return new GuiClick(this);
+    }
+
     private void validate() {
         if (topLeft == null)
             topLeft = new PointF(0, 0);

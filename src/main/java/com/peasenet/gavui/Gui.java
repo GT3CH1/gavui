@@ -134,6 +134,9 @@ public class Gui {
     }
 
     public float getTransparency() {
+        if (this.transparency == -1) {
+            return getGavUiAlpha();
+        }
         return transparency;
     }
 
@@ -144,15 +147,16 @@ public class Gui {
      */
     public void setTransparency(float transparency) {
         this.transparency = transparency;
+        if (transparency == -1) {
+            return;
+        }
         if (transparency < 0) {
             this.transparency = 0f;
         }
         if (transparency > 1f) {
             this.transparency = 1f;
         }
-        if (transparency == -1) {
-            this.transparency = getGavUiAlpha();
-        }
+
     }
 
     public Text getTitle() {
