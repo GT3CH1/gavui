@@ -116,6 +116,7 @@ public class GuiScroll extends GuiDropdown {
             if (getDirection() == Direction.RIGHT)
                 gui.setPosition(new PointF(getX2() + 14, getY2() + (this.children.size()) * 12));
         }
+        this.setDirection(builder.getDirection());
         this.defaultMaxChildren = builder.getDefaultMaxChildren();
         this.maxChildren = builder.getMaxChildren();
         this.maxChildren = Math.min(children.size(), this.maxChildren);
@@ -138,6 +139,14 @@ public class GuiScroll extends GuiDropdown {
         }
         GuiUtil.drawBox(bg, getBox(), drawContext.getMatrices(), getGavUiAlpha());
         var textColor = frozen() ? getGavUiFrozen() : getGavUiFg();
+        //TODO: Color similarity
+        if (title != null) {
+            if (textColor.similarity(bg) < 0.2f) {
+                textColor = textColor.invert();
+                if (textColor.similarity(bg) < 0.2f)
+                    textColor = Colors.WHITE;
+            }
+        }
         drawText(drawContext, tr, title, getX() + 2, getY() + 1.5f, textColor);
         renderSymbol(drawContext, tr, textColor);
         GuiUtil.drawOutline(getGavUiBorder(), getBox(), drawContext.getMatrices());

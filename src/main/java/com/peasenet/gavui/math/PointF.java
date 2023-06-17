@@ -42,6 +42,10 @@ public record PointF(float x, float y) {
         this((float) x, (float) y);
     }
 
+    public PointF(int x, int y) {
+        this((float) x, (float) y);
+    }
+
     /**
      * Adds two points together
      *

@@ -125,6 +125,7 @@ public class Gui {
         defaultPosition = BoxF.copy(box);
         dragging = false;
         this.translationKey = builder.getTranslationKey();
+        setPosition(builder.getTopLeft());
         setBackground(builder.getBackgroundColor());
         setHoverable(builder.isHoverable());
         setSymbol(builder.getSymbol());
@@ -385,11 +386,22 @@ public class Gui {
         if (isHidden()) return;
         var matrixStack = drawContext.getMatrices();
         var bg = backgroundColor;
-        if (mouseWithinGui(mouseX, mouseY) && hoverable) bg = bg.brighten(0.25f);
+        if (bg == null)
+            bg = getGavUiBg();
+        if (mouseWithinGui(mouseX, mouseY) && hoverable)
+            bg = bg.brighten(0.25f);
         GuiUtil.drawBox(bg, getBox(), matrixStack, getTransparency());
-        if (title != null)
-            drawText(drawContext, tr, title, getX() + 2, getY() + 1.5f, getGavUiFg(), false);
-        drawSymbol(drawContext, tr);
+        var textColor = getGavUiFg();
+        if (title != null) {
+            if (textColor.similarity(bg) < 0.3f) {
+                textColor = textColor.invert();
+                if (textColor.similarity(bg) < 0.3f)
+                    textColor = Colors.WHITE;
+            }
+            drawText(drawContext, tr, title, getX() + 2, getY() + 1.5f, textColor);
+
+        }
+        drawSymbol(drawContext, tr, textColor);
         GuiUtil.drawOutline(getGavUiBorder(), box, matrixStack);
         renderChildren(drawContext, tr, mouseX, mouseY, delta);
     }
@@ -400,9 +412,9 @@ public class Gui {
      * @param drawContext - The draw context to use.
      * @param tr          - The text renderer to use.
      */
-    private void drawSymbol(DrawContext drawContext, TextRenderer tr) {
+    private void drawSymbol(DrawContext drawContext, TextRenderer tr, Color color) {
         if (symbol != '\0')
-            drawText(drawContext, tr, Text.of(String.valueOf(symbol)), getX2() - 9f, getY() + 1.5f, getGavUiFg(), false);
+            drawText(drawContext, tr, Text.of(String.valueOf(symbol)), getX2() - 9f, getY() + 1.5f, color, false);
     }
 
     /**
@@ -648,5 +660,9 @@ public class Gui {
 
     protected void drawText(DrawContext drawContext, TextRenderer textRenderer, Text text, float x, float y, Color color) {
         drawText(drawContext, textRenderer, text, x, y, color, false);
+    }
+
+    public String getTranslationKey() {
+        return this.translationKey;
     }
 }

@@ -52,9 +52,10 @@ public class Color implements Serializable {
      * @param blue  Blue value.
      */
     public Color(int red, int green, int blue) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
+        // Make sure the values are within the range via clamping
+        this.red = Math.max(0, Math.min(255, red));
+        this.green = Math.max(0, Math.min(255, green));
+        this.blue = Math.max(0, Math.min(255, blue));
     }
 
     /**
@@ -150,6 +151,55 @@ public class Color implements Serializable {
             newG = 255;
         if (newB > 255)
             newB = 255;
+        // check if the color is too bright, if so, darken it
+        if (newR + newG + newB > 255 * 3) {
+            newR = red - (int) (amount * 255);
+            newG = green - (int) (amount * 255);
+            newB = blue - (int) (amount * 255);
+        }
+        // check if the color is the same. if so, return a new color that is closer to white
+        if (newR == red) {
+            newG += (int) (amount * 255);
+            newB += blue + (int) (amount * 255);
+            return new Color(newR, newG, newB);
+
+        }
+        if (newG == green) {
+            newR += red + (int) (amount * 255);
+            newB += blue + (int) (amount * 255);
+            return new Color(newR, newG, newB);
+
+        }
+        if (newB == blue) {
+            newR += red + (int) (amount * 255);
+            newG += green + (int) (amount * 255);
+            return new Color(newR, newG, newB);
+
+        }
         return new Color(newR, newG, newB);
+    }
+
+    public Color invert() {
+        return new Color(255 - red, 255 - green, 255 - blue);
+    }
+
+    /**
+     * Calculates the similarity between two colors. The value will be between 0 and 1, with 0 being the same color and 1 being the opposite color.
+     *
+     * @param other - the other color
+     * @return the similarity
+     */
+    public float similarity(Color other) {
+        var maxRed = Math.max(red, other.red);
+        var maxGreen = Math.max(green, other.green);
+        var maxBlue = Math.max(blue, other.blue);
+        var minRed = Math.min(red, other.red);
+        var minGreen = Math.min(green, other.green);
+        var minBlue = Math.min(blue, other.blue);
+        var r = (maxRed - minRed);
+        var g = (maxGreen - minGreen);
+        var b = (maxBlue - minBlue);
+        var similarity = (r + g + b) / (255f * 3f);
+        return similarity;
     }
 }

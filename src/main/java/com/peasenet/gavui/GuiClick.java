@@ -39,6 +39,9 @@ public class GuiClick extends Gui {
      */
     protected GuiCallback callback;
 
+    protected GuiCallback onClick;
+
+
     /**
      * Creates a new GUI menu.
      *
@@ -65,6 +68,10 @@ public class GuiClick extends Gui {
         this.callback = callback;
     }
 
+    public void setOnClick(GuiCallback onClick) {
+        this.onClick = onClick;
+    }
+
     /**
      * Handles clicks on the gui.
      *
@@ -79,7 +86,12 @@ public class GuiClick extends Gui {
         var inGui = mouseWithinGui(mouseX, mouseY) && !isHidden();
         if (inGui && GavUISettings.getBool("gui.sound"))
             MinecraftClient.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 0.5f, 1);
-        if (inGui && callback != null && !isHidden()) callback.callback();
+        if (inGui && !isHidden()) {
+            if (onClick != null)
+                onClick.callback();
+            if (callback != null)
+                callback.callback();
+        }
 
         return inGui;
     }

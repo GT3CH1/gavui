@@ -76,7 +76,6 @@ public class GuiToggle extends GuiClick {
      */
     public void setState(boolean on) {
         isOn = on;
-
     }
 
     /**

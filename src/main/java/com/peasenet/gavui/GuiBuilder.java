@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-$YEAR. Gavin Pease and contributors.
+ * Copyright (c) 2022-2023. Gavin Pease and contributors.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction, including
@@ -37,7 +37,7 @@ public class GuiBuilder {
     private float width;
     private float height;
     private PointF topLeft = new PointF(0, 0);
-    private boolean hoverable;
+    private boolean hoverable = true;
     private boolean hidden;
     private boolean frozen;
     private boolean isOpen;
@@ -59,6 +59,16 @@ public class GuiBuilder {
     private ArrayList<Gui> children;
     private String translationKey;
     private float transparency = -1;
+    private GuiDropdown.Direction direction = GuiDropdown.Direction.DOWN;
+
+    public GuiDropdown.Direction getDirection() {
+        return direction;
+    }
+
+    public GuiBuilder setDirection(GuiDropdown.Direction direction) {
+        this.direction = direction;
+        return this;
+    }
 
     public float getTransparency() {
         return transparency;
@@ -86,6 +96,12 @@ public class GuiBuilder {
     }
 
     public GuiBuilder setWidth(float width) {
+        this.width = width;
+        this.boxF = new BoxF(topLeft, width, height);
+        return this;
+    }
+
+    public GuiBuilder setWidth(int width) {
         this.width = width;
         this.boxF = new BoxF(topLeft, width, height);
         return this;
