@@ -179,6 +179,11 @@ public class GuiBuilder {
         return this;
     }
 
+    public GuiBuilder setTranslationKey(String translationKey) {
+        setTitle(translationKey);
+        return this;
+    }
+
     public GuiBuilder setTitle(Text title) {
         this.title = title;
         return this;
