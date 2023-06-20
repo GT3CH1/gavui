@@ -149,7 +149,8 @@ public class GuiScroll extends GuiDropdown {
         }
         drawText(drawContext, tr, title, getX() + 2, getY() + 1.5f, textColor);
         renderSymbol(drawContext, tr, textColor);
-        GuiUtil.drawOutline(getGavUiBorder(), getBox(), drawContext.getMatrices());
+        if (getDrawBorder())
+            GuiUtil.drawOutline(getGavUiBorder(), getBox(), drawContext.getMatrices());
         if (!isOpen()) return;
         resetChildPos();
 
@@ -420,7 +421,7 @@ public class GuiScroll extends GuiDropdown {
         if (!isOpen() && !isParent()) return false;
         for (Gui child : children) {
             if (child.isHidden()) continue;
-            if (child.equals(clickedGui) && clickedGui.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)) {
+            if (child.equals(Gui.getClickedGui()) && Gui.getClickedGui().mouseDragged(mouseX, mouseY, button, deltaX, deltaY)) {
                 return true;
             } else if (child.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)) return true;
         }

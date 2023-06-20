@@ -42,6 +42,9 @@ public class GuiBuilder {
     private boolean frozen;
     private boolean isOpen;
     private boolean isOn;
+
+    private boolean drawBorder = true;
+
     private Text title;
     private Gui parent;
     private char symbol = '\0';
@@ -101,6 +104,15 @@ public class GuiBuilder {
         return this;
     }
 
+    public boolean getDrawBorder() {
+        return drawBorder;
+    }
+
+    public GuiBuilder setDrawBorder(boolean drawBorder) {
+        this.drawBorder = drawBorder;
+        return this;
+    }
+
     public GuiBuilder setWidth(int width) {
         this.width = width;
         this.boxF = new BoxF(topLeft, width, height);
@@ -112,6 +124,12 @@ public class GuiBuilder {
     }
 
     public GuiBuilder setHeight(float height) {
+        this.height = height;
+        this.boxF = new BoxF(topLeft, width, height);
+        return this;
+    }
+
+    public GuiBuilder setHeight(int height) {
         this.height = height;
         this.boxF = new BoxF(topLeft, width, height);
         return this;
@@ -307,6 +325,13 @@ public class GuiBuilder {
         this.boxF = new BoxF(topLeft, width, height);
         return this;
     }
+
+    public GuiBuilder setTopLeft(float x, float y) {
+        topLeft = new PointF(x, y);
+        this.boxF = new BoxF(topLeft, width, height);
+        return this;
+    }
+
 
     public GuiBuilder setMidPoint(PointF midPoint) {
         this.boxF.setMiddle(midPoint);

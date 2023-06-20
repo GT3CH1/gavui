@@ -26,6 +26,7 @@ import com.peasenet.gavui.math.BoxF;
 import com.peasenet.gavui.math.PointF;
 import com.peasenet.gavui.util.GavUISettings;
 import com.peasenet.gavui.util.GuiUtil;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
@@ -105,6 +106,11 @@ public class Gui {
     private boolean hoverable = true;
 
     /**
+     * Whether this GUI has a border to be drawn.
+     */
+    private boolean drawBorder = true;
+
+    /**
      * Creates a new GUI menu.
      *
      * @param topLeft - The top left corner of the gui.
@@ -121,7 +127,11 @@ public class Gui {
 
     public Gui(GuiBuilder builder) {
         this.title = builder.getTitle();
-        box = new BoxF(builder.getTopLeft(), builder.getWidth(), builder.getHeight());
+        var w = builder.getWidth();
+        if (title != null && MinecraftClient.getInstance().textRenderer != null)
+            w = Math.max(w, MinecraftClient.getInstance().textRenderer.getWidth(title));
+
+        box = new BoxF(builder.getTopLeft(), w, builder.getHeight());
         defaultPosition = BoxF.copy(box);
         dragging = false;
         this.translationKey = builder.getTranslationKey();
@@ -132,6 +142,19 @@ public class Gui {
         setHidden(builder.isHidden());
         setHoverable(builder.isHoverable());
         setTransparency(builder.getTransparency());
+        setDrawBorder(builder.getDrawBorder());
+    }
+
+    public static Gui getClickedGui() {
+        return clickedGui;
+    }
+
+    public boolean getDrawBorder() {
+        return drawBorder;
+    }
+
+    private void setDrawBorder(boolean drawBorder) {
+        this.drawBorder = drawBorder;
     }
 
     public float getTransparency() {
@@ -363,7 +386,6 @@ public class Gui {
         shrunkForScroll = true;
     }
 
-
     /**
      * Gets the height of the dropdown.
      *
@@ -402,7 +424,8 @@ public class Gui {
 
         }
         drawSymbol(drawContext, tr, textColor);
-        GuiUtil.drawOutline(getGavUiBorder(), box, matrixStack);
+        if (this.drawBorder)
+            GuiUtil.drawOutline(getGavUiBorder(), box, matrixStack);
         renderChildren(drawContext, tr, mouseX, mouseY, delta);
     }
 
