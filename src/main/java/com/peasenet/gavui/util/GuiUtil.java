@@ -21,6 +21,7 @@
 package com.peasenet.gavui.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.peasenet.gavui.GavUI;
 import com.peasenet.gavui.color.Color;
 import com.peasenet.gavui.math.BoxF;
 import com.peasenet.gavui.math.PointF;
@@ -79,6 +80,16 @@ public class GuiUtil {
      */
     public static void drawOutline(Color c, BoxF box, MatrixStack matrixStack) {
         drawOutline(c, box, matrixStack, 1.0f);
+    }
+
+    /**
+     * Draws an outline of the given box with the given color, with an alpha of 1f.
+     *
+     * @param boxF        - The box to draw.
+     * @param matrixStack - The matrix stack to draw with.
+     */
+    public static void drawOutline(BoxF boxF, MatrixStack matrixStack) {
+        drawOutline(GavUI.getBorderColor(), boxF, matrixStack);
     }
 
     /**
