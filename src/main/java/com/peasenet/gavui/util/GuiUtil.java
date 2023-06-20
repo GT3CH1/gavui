@@ -89,7 +89,7 @@ public class GuiUtil {
      * @param matrixStack - The matrix stack to draw with.
      */
     public static void drawOutline(BoxF boxF, MatrixStack matrixStack) {
-        drawOutline(GavUI.getBorderColor(), boxF, matrixStack);
+        drawOutline(GavUI.borderColor(), boxF, matrixStack);
     }
 
     /**

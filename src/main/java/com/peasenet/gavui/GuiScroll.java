@@ -130,15 +130,15 @@ public class GuiScroll extends GuiDropdown {
         var bg = getBackgroundColor();
 
         if (isParent())
-            bg = getGavUiCategory();
+            bg = GavUI.parentColor();
         else
-            bg = getGavUiBg();
+            bg = GavUI.backgroundColor();
         var childHasMouse = children.stream().anyMatch(gui -> gui.mouseWithinGui(mouseX, mouseY));
         if (mouseWithinGui(mouseX, mouseY) && !childHasMouse) {
             bg = bg.brighten(0.5f);
         }
-        GuiUtil.drawBox(bg, getBox(), drawContext.getMatrices(), getGavUiAlpha());
-        var textColor = frozen() ? getGavUiFrozen() : getGavUiFg();
+        GuiUtil.drawBox(bg, getBox(), drawContext.getMatrices(), GavUI.getAlpha());
+        var textColor = frozen() ? GavUI.frozenColor() : GavUI.textColor();
         //TODO: Color similarity
         if (title != null) {
             if (textColor.similarity(bg) < 0.2f) {
@@ -150,7 +150,7 @@ public class GuiScroll extends GuiDropdown {
         drawText(drawContext, tr, title, getX() + 2, getY() + 1.5f, textColor);
         renderSymbol(drawContext, tr, textColor);
         if (getDrawBorder())
-            GuiUtil.drawOutline(getGavUiBorder(), getBox(), drawContext.getMatrices());
+            GuiUtil.drawOutline(GavUI.borderColor(), getBox(), drawContext.getMatrices());
         if (!isOpen()) return;
         resetChildPos();
 
@@ -190,7 +190,7 @@ public class GuiScroll extends GuiDropdown {
             drawScrollBar(matrixStack);
         }
         if (!child.isParent() && !(child instanceof GuiCycle)) {
-            child.setBackground(getGavUiBg());
+            child.setBackground(GavUI.backgroundColor());
         }
         child.render(drawContext, tr, mouseX, mouseY, delta);
     }
@@ -278,8 +278,8 @@ public class GuiScroll extends GuiDropdown {
             scrollBoxY = getY();
         }
         var box = new BoxF(new PointF(scrollBoxX, scrollBoxY), 5, scrollBoxHeight);
-        GuiUtil.drawBox(getGavUiBg(), box, matrixStack, getGavUiAlpha());
-        GuiUtil.drawOutline(getGavUiBorder(), box, matrixStack);
+        GuiUtil.drawBox(GavUI.backgroundColor(), box, matrixStack, GavUI.getAlpha());
+        GuiUtil.drawOutline(GavUI.borderColor(), box, matrixStack);
     }
 
     /**

@@ -24,7 +24,6 @@ import com.peasenet.gavui.color.Color;
 import com.peasenet.gavui.color.Colors;
 import com.peasenet.gavui.math.BoxF;
 import com.peasenet.gavui.math.PointF;
-import com.peasenet.gavui.util.GavUISettings;
 import com.peasenet.gavui.util.GuiUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -159,7 +158,7 @@ public class Gui {
 
     public float getTransparency() {
         if (this.transparency == -1) {
-            return getGavUiAlpha();
+            return GavUI.getAlpha();
         }
         return transparency;
     }
@@ -409,11 +408,11 @@ public class Gui {
         var matrixStack = drawContext.getMatrices();
         var bg = backgroundColor;
         if (bg == null)
-            bg = getGavUiBg();
+            bg = GavUI.backgroundColor();
         if (mouseWithinGui(mouseX, mouseY) && hoverable)
             bg = bg.brighten(0.25f);
         GuiUtil.drawBox(bg, getBox(), matrixStack, getTransparency());
-        var textColor = getGavUiFg();
+        var textColor = GavUI.textColor();
         if (title != null) {
             if (textColor.similarity(bg) < 0.3f) {
                 textColor = textColor.invert();
@@ -425,7 +424,7 @@ public class Gui {
         }
         drawSymbol(drawContext, tr, textColor);
         if (this.drawBorder)
-            GuiUtil.drawOutline(getGavUiBorder(), box, matrixStack);
+            GuiUtil.drawOutline(GavUI.borderColor(), box, matrixStack);
         renderChildren(drawContext, tr, mouseX, mouseY, delta);
     }
 
@@ -600,68 +599,6 @@ public class Gui {
         return false;
     }
 
-    /**
-     * Gets the background color from settings./
-     *
-     * @return The background color from settings.
-     */
-    protected Color getGavUiBg() {
-        return GavUISettings.getColor("gui.color.background");
-    }
-
-    /**
-     * Gets the foreground color from settings.
-     *
-     * @return The foreground color from settings.
-     */
-    protected Color getGavUiFg() {
-        return GavUISettings.getColor("gui.color.foreground");
-    }
-
-    /**
-     * Gets the border color from settings.
-     *
-     * @return The border color from settings.
-     */
-    protected Color getGavUiBorder() {
-        return GavUISettings.getColor("gui.color.border");
-    }
-
-    /**
-     * Gets the alpha from settings.
-     *
-     * @return The alpha from settings.
-     */
-    protected float getGavUiAlpha() {
-        return GavUISettings.getFloat("gui.alpha");
-    }
-
-    /**
-     * Gets the frozen element color from settings.
-     *
-     * @return The frozen element color from settings.
-     */
-    protected Color getGavUiFrozen() {
-        return GavUISettings.getColor("gui.color.frozen");
-    }
-
-    /**
-     * Gets the category color from settings.
-     *
-     * @return The category color from settings.
-     */
-    protected Color getGavUiCategory() {
-        return GavUISettings.getColor("gui.color.category");
-    }
-
-    /**
-     * Gets the color if an element is enabled from settings.
-     *
-     * @return The color if an element is enabled from settings.
-     */
-    protected Color getGavUiEnabled() {
-        return GavUISettings.getColor("gui.color.enabled");
-    }
 
     /**
      * Sets the default position of the gui.

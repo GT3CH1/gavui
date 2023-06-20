@@ -121,8 +121,8 @@ public class GuiToggle extends GuiClick {
         symbol = isOn ? '\u2611' : '\u2610';
         if (renderCallback != null)
             renderCallback.callback();
-        if (isOn()) setBackground(getGavUiEnabled());
-        else setBackground(getGavUiBg());
+        if (isOn()) setBackground(GavUI.enabledColor());
+        else setBackground(GavUI.backgroundColor());
         super.render(drawContext, tr, mouseX, mouseY, delta);
     }
 }

@@ -20,6 +20,7 @@
 
 package com.peasenet.gavui;
 
+import com.peasenet.gavui.color.Color;
 import com.peasenet.gavui.util.GavUISettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,5 +42,63 @@ public class GavUI {
     public static void initialize() {
         GavUISettings.initialize();
         LOGGER.info("GavUI has been initialized.");
+    }
+
+    public static Color borderColor() {
+        return GavUISettings.getColor("gui.color.border");
+    }
+
+    /**
+     * Gets the background color from settings./
+     *
+     * @return The background color from settings.
+     */
+    public static Color backgroundColor() {
+        return GavUISettings.getColor("gui.color.background");
+    }
+
+    /**
+     * Gets the foreground color from settings.
+     *
+     * @return The foreground color from settings.
+     */
+    public static Color textColor() {
+        return GavUISettings.getColor("gui.color.foreground");
+    }
+
+    /**
+     * Gets the alpha from settings.
+     *
+     * @return The alpha from settings.
+     */
+    public static float getAlpha() {
+        return GavUISettings.getFloat("gui.alpha");
+    }
+
+    /**
+     * Gets the frozen element color from settings.
+     *
+     * @return The frozen element color from settings.
+     */
+    public static Color frozenColor() {
+        return GavUISettings.getColor("gui.color.frozen");
+    }
+
+    /**
+     * Gets the category color from settings.
+     *
+     * @return The category color from settings.
+     */
+    public static Color parentColor() {
+        return GavUISettings.getColor("gui.color.category");
+    }
+
+    /**
+     * Gets the color if an element is enabled from settings.
+     *
+     * @return The color if an element is enabled from settings.
+     */
+    public static Color enabledColor() {
+        return GavUISettings.getColor("gui.color.enabled");
     }
 }
