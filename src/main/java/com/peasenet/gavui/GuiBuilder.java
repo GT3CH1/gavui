@@ -192,6 +192,8 @@ public class GuiBuilder {
     }
 
     public GuiBuilder setTitle(String translationKey) {
+        if (translationKey == null || translationKey.isEmpty())
+            return this;
         this.title = Text.translatable(translationKey);
         this.translationKey = translationKey;
         return this;
