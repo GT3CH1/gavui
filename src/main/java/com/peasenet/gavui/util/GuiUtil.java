@@ -155,5 +155,7 @@ public class GuiUtil {
         bufferBuilder.vertex(matrix, p1.x(), p1.y(), 0).next();
         bufferBuilder.vertex(matrix, p2.x(), p2.y(), 0).next();
         Tessellator.getInstance().draw();
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        RenderSystem.disableBlend();
     }
 }
